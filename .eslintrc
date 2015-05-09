@@ -1,0 +1,17 @@
+{
+  "env": {
+    "browser": true,
+    "node": true,
+    "es6": true
+  },
+  "ecmaFeatures": {
+    "jsx": true,
+    "modules": true
+  },
+  "rules": {
+    "quotes": [2, "single"],
+    "no-undef": false,
+    "no-unused-vars": false,
+    "no-debugger": false
+  }
+}

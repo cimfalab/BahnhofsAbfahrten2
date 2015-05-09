@@ -1,10 +1,12 @@
 {
-  "name": "skeleton",
+  "name": "reihenzaehler",
   "version": "0.0.0",
   "description": "",
   "main": "webpack.config.js",
   "scripts": {
-    "dev": "webpack-dev-server --inline --hot -d --content-base www/ --history-api-fallback"
+    "dev": "webpack-dev-server --inline --hot -d --content-base www/ --history-api-fallback",
+    "prod": "webpack -p",
+    "travis": "npm run prod"
   },
   "author": "marudor",
   "license": "MIT",
@@ -21,5 +23,11 @@
     "style-loader": "^0.12.2",
     "uglify-loader": "^1.2.0",
     "webpack": "^1.8.11"
+  },
+  "dependencies": {
+    "babel-runtime": "^5.2.17",
+    "flux": "^2.0.3",
+    "react": "^0.13.3",
+    "when": "^3.7.3"
   }
 }
