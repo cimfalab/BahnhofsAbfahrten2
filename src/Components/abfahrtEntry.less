@@ -1,0 +1,84 @@
+.outerEntry {
+  box-shadow: 0 1px 0 rgba(0, 0, 0, 0.24)!important;
+}
+
+.entry {
+  &.cancelled {
+    .train {
+      text-decoration: line-through;
+    }
+    .mid {
+      .destination {
+        text-decoration: line-through;
+      }
+      .via {
+        text-decoration: line-through;
+      }
+    }
+    .end {
+      text-decoration: line-through;
+    }
+  };
+  @media screen and (max-width: 1200px) {
+    font-size: 0.35em;
+  };
+  line-height: 1;
+  padding-bottom: 5px;
+  padding-top: 5px;
+
+  display: flex;
+  .train {
+    flex: 1;
+    @media screen and (max-width: 1200px) {
+      max-width: 75px;
+    };
+    max-width: 280px;
+    font-size: 3em;
+    line-height: 1.2;
+  }
+  .mid {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    white-space: nowrap;
+    line-height: 1.2;
+    .destination {
+      font-size: 4em;
+    }
+    .via {
+      font-size: 2.1em;
+      line-height: 1.2;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .info {
+      text-decoration: none;
+      color: red;
+      font-size: 2.1em;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+  }
+  .end {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: flex-end;
+    .time {
+      font-size: 2.4em;
+    }
+    .delay {
+      color: red;
+      margin-right: 0.4em;
+      font-size: 3em;
+    }
+    .platform {
+      font-size: 3em;
+    }
+  }
+
+  .cancel {
+    text-decoration: line-through;
+  }
+}

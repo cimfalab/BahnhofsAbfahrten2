@@ -12,6 +12,7 @@
     "quotes": [2, "single"],
     "no-undef": false,
     "no-unused-vars": false,
-    "no-debugger": false
+    "no-debugger": false,
+    "new-cap": false
   }
 }
