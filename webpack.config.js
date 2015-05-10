@@ -9,7 +9,7 @@ module.exports = {
   context: __dirname,
   entry: ['./src/main.js'],
   output: {
-    path: path.resolve('/www'),
+    path: path.resolve('www'),
     filename: 'app.js',
     publicPath: ''
   },
