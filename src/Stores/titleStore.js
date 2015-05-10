@@ -1,4 +1,5 @@
 import titleActions from '../Actions/titleActions.js';
+import favActions from '../Actions/favActions.js';
 
 export default Reflux.createStore({
   init() {
@@ -7,11 +8,16 @@ export default Reflux.createStore({
   listenables: [titleActions],
   onResetTitle() {
     this.setTitle(this.defaultTitle);
+    favActions.favButton(null);
   },
   onChangeTitle(title) {
     this.setTitle(title);
   },
+  onRevertTitle() {
+    this.setTitle(this.oldTitle);
+  },
   setTitle(title) {
+    this.oldTitle = this.title;
     this.title = title;
     this.trigger(this.title);
   }

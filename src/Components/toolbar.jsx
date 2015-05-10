@@ -1,6 +1,8 @@
 import {AppBar, IconButton} from 'material-ui';
 import {Typeahead} from 'react-typeahead';
 import titleStore from '../Stores/titleStore.js';
+import favStore from '../Stores/favStore.js';
+import favActions from '../Actions/favActions.js';
 import titleActions from '../Actions/titleActions.js';
 import abfahrtActions from '../Actions/abfahrtActions.js';
 import stationStore from '../Stores/stationStore.js';
@@ -14,14 +16,8 @@ export default class extends React.Component {
         iconClassName="md md-search"
         onClick={this.openInput.bind(this)}/>
     );
-    this.submitButton = (
-      <IconButton
-        iconClassName="md md-send"
-        onClick={this.submit.bind(this)}/>
-    );
     this.state = {
-      title: titleStore.defaultTitle,
-      icon: this.searchButton
+      title: titleStore.defaultTitle
     };
   }
   componentDidUpdate() {
@@ -32,14 +28,19 @@ export default class extends React.Component {
     }
   }
   componentDidMount() {
-    this.unsubscribe = titleStore.listen(title => {
+    this.unsubscribe1 = titleStore.listen((title, oldTitle) => {
       this.setState({
-        title
+        title,
+        oldTitle
       });
     });
+    const fn = fav => this.setState({fav});
+    favStore.emitter.addListener('favButton', fn);
+    this.unsubscribe2 = () => favStore.emitter.removeListener('favButton', fn);
   }
   componentWillUnmount() {
     this.unsubscribe();
+    this.unsubscribe2();
   }
   openInput() {
     const style = {
@@ -50,17 +51,21 @@ export default class extends React.Component {
         options={stationStore.getNames()}
         maxVisible={7}
         onOptionSelected={this.submit.bind(this)}
-        customClasses={style}/>
+        customClasses={style}
+        onKeyDown={this.handleKeyDown.bind(this)}/>
     );
     this.setState({
-      icon: this.submitButton,
       station: ''
     });
   }
+  handleKeyDown(e) {
+    switch (e.keyCode) {
+      case 27: //Escape
+        titleActions.revertTitle();
+        break;
+    }
+  }
   submit(station) {
-    this.setState({
-      icon: this.searchButton
-    });
     if (!station) {
       titleActions.resetTitle();
     } else {
@@ -71,11 +76,12 @@ export default class extends React.Component {
     });
   }
   render() {
+    var icons = (<span>{this.searchButton}{this.state.fav}</span>);
     return (
       <AppBar
         showMenuIconButton={false}
         title={this.state.title}
-        iconElementRight={this.state.icon}/>
+        iconElementRight={icons}/>
     );
   }
 }

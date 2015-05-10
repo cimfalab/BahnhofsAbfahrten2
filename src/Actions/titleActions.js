@@ -1,4 +1,5 @@
 export default Reflux.createActions([
   'changeTitle',
-  'resetTitle'
+  'resetTitle',
+  'revertTitle'
 ]);

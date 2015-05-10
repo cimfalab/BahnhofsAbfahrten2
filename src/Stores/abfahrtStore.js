@@ -1,19 +1,9 @@
 import abfahrtActions from '../Actions/abfahrtActions.js';
-import { OrderedMap } from 'immutable';
-
-
-const localStorageKey = 'abfahrten';
-var counter = 0;
+import { List } from 'immutable';
 
 export default Reflux.createStore({
   init() {
-    const loadedList = localStorage.getItem(localStorageKey);
-    this.list = OrderedMap();
-    if (loadedList) {
-      _.each(loadedList, item => {
-        this.list = this.list.set(counter++, item);
-      });
-    }
+    this.list = List();
   },
   listenables: [abfahrtActions],
   onAddAbfahrt(abfahrt) {
@@ -39,7 +29,7 @@ export default Reflux.createStore({
   onReceiveAbfahrten(abfahrten) {
     this.list = this.list.clear();
     _.each(abfahrten, abfahrt => {
-      this.list = this.list.set(counter++, abfahrt);
+      this.list = this.list.push(abfahrt);
     });
     this.trigger(this.list.toJS());
   },
@@ -47,7 +37,6 @@ export default Reflux.createStore({
     this.updateList(this.list.clear());
   },
   updateList(list) {
-    localStorage.setItem(localStorageKey, list.toJSON());
     this.list = list;
     this.trigger(this.list.toJS());
   }
