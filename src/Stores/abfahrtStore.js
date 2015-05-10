@@ -26,7 +26,7 @@ export default Reflux.createStore({
     }
   },
   onRequestAbfahrten(station) {
-    axios.get(`http://dbf.finalrewind.org/${station}`, {
+    axios.get(`https://dbf.finalrewind.org/${station}`, {
       params: {
         mode: 'marudor',
         backend: 'iris',
