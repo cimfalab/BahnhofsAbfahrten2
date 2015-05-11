@@ -10,7 +10,7 @@ export default class extends React.Component {
   }
   render() {
     const station = {
-      station: this.props.fav
+      station: this.props.fav.replace('%2F', '/')
     };
     return (
       <Paper onClick={this.transitionTo.bind(this)} className="fav">

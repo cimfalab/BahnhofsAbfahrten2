@@ -72,7 +72,7 @@ export default class extends React.Component {
       titleActions.changeTitle(station);
     }
     global.router.transitionTo('abfahrten', {
-      station: station
+      station: station.replace('/', '%2F')
     });
   }
   render() {

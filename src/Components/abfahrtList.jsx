@@ -36,7 +36,7 @@ export default class extends React.Component {
   }
   componentWillReceiveProps(newProps) {
     abfahrtActions.clearAbfahrten();
-    this.getAbfahrten(newProps.params.station);
+    this.getAbfahrten(newProps.params.station.replace('%2F', '/'));
   }
   componentDidMount() {
     this.unregister = abfahrtStore.listen(abfahrten => {
@@ -55,7 +55,7 @@ export default class extends React.Component {
     var fn = this.handleError.bind(this);
     abfahrtStore.emitter.addListener('error', fn);
     this.unregister3 = () => abfahrtStore.emitter.removeListener('error', fn);
-    this.getAbfahrten(this.props.params.station);
+    this.getAbfahrten(this.props.params.station.replace('%2F', '/'));
   }
   handleError(error) {
     this.setState({
