@@ -76,7 +76,8 @@ export default class extends React.Component {
     });
   }
   render() {
-    var icons = (<span>{this.searchButton}{this.state.fav}</span>);
+    var searchIcon = _.isString(this.state.title) ? this.searchButton : '';
+    var icons = (<span>{searchIcon}{this.state.fav}</span>);
     return (
       <AppBar
         showMenuIconButton={false}

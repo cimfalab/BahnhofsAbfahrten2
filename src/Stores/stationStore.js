@@ -7,4 +7,11 @@ export default class {
   static getNames() {
     return _.map(stations, s => s.name);
   }
+  static getIndexed() {
+    var indexedStations = {};
+    _.each(stations, s => {
+      indexedStations[s.name] = s.code;
+    });
+    return indexedStations;
+  }
 }

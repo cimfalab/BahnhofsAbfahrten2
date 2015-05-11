@@ -1,9 +1,11 @@
 import abfahrtActions from '../Actions/abfahrtActions.js';
+import stationStore from './stationStore.js';
 import { List } from 'immutable';
 
 export default Reflux.createStore({
   init() {
     this.list = List();
+    this.indexedStations = stationStore.getIndexed();
   },
   listenables: [abfahrtActions],
   onAddAbfahrt(abfahrt) {
@@ -16,6 +18,7 @@ export default Reflux.createStore({
     }
   },
   onRequestAbfahrten(station) {
+    station = this.indexedStations[station] || station;
     axios.get(`http://dbf.finalrewind.org/${station}`, {
       params: {
         mode: 'marudor',
@@ -23,8 +26,15 @@ export default Reflux.createStore({
         version: 1
       }
     }).then(abfahrten => {
-      abfahrtActions.receiveAbfahrten(abfahrten.data.departures);
+      if (abfahrten.data.error) {
+        abfahrtActions.error(abfahrten.data.error);
+      } else {
+        abfahrtActions.receiveAbfahrten(abfahrten.data.departures);
+      }
     });
+  },
+  onError(error) {
+    this.emitter.emit('error', error);
   },
   onReceiveAbfahrten(abfahrten) {
     this.list = this.list.clear();
