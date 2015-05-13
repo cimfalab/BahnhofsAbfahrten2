@@ -76,13 +76,30 @@ export default class extends React.Component {
     this.unregister2();
     this.unregister3();
   }
+  beautifyError(error) {
+    if (_.contains(error, 'Got no results')) {
+      return 'Keine Abfahrten';
+    }
+  }
   render() {
     if (this.state.error) {
+      let errorContent = this.beautifyError(this.state.error);
+      if (!errorContent) {
+        errorContent = (
+          <span>
+            Well this did not work.
+            <br/>
+            {this.state.error}
+            <br/>
+            <a
+              href="https://github.com/marudor/BahnhofsAbfahrten/issues"
+              target="_new">Issue erstellen</a>
+          </span>
+        );
+      }
       return (
         <Paper className="error">
-          Well this did not work :(<br/>
-          {this.state.error}<br/>
-        <a href="https://github.com/marudor/BahnhofsAbfahrten2/issues" target="_new">Issue erstellen</a>
+          {errorContent}
         </Paper>
       );
     }
@@ -96,7 +113,10 @@ export default class extends React.Component {
         {
           _.map(this.state.abfahrten, abfahrt => {
             const key = abfahrt.train + abfahrt.time;
-            return (<AbfahrtEntry key={key} abfahrt={abfahrt}/>);
+            return (
+              <AbfahrtEntry key={key}
+                abfahrt={abfahrt}/>
+            );
           })
         }
       </div>
