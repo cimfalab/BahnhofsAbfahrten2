@@ -1,4 +1,5 @@
 var path = require('path');
+var webpack = require('webpack');
 
 module.exports = {
   eslint: {
@@ -7,7 +8,9 @@ module.exports = {
     failOnError: true
   },
   context: __dirname,
-  entry: ['./src/main.js'],
+  entry: [
+    './src/main.js'
+  ],
   output: {
     path: path.resolve('www'),
     filename: 'app.js',
@@ -15,12 +18,15 @@ module.exports = {
   },
   module: {
     loaders: [
-      { test: /\.less$/, loader: 'style!css!autoprefixer?browsers=last 2 version!less?root=.'},
-      { test: /\.jsx?$/, exclude: /node_modules/, loader: 'babel-loader?optional=runtime!eslint'},
+      { test: /\.less$/, loader: 'style!css!autoprefixer?browsers=last 2 version!less' },
+      { test: /\.jsx?$/, exclude: /node_modules/, loader: 'babel-loader?optional=runtime!eslint', include: path.join(__dirname, 'src')},
       { test: /\.(jpg|png|gif)$/, loader: 'file!image' },
       { test: /\.woff2?(\?v=.*)?$/, loader: 'url?limit=10000&minetype=application/font-woff' },
-      { test: /\.(eot|ttf|svg|otf)(\?v=.*)?$/, loader: 'file' },
+      { test: /\.(eot|ttf|svg|otf)(\?v=.*)?$/, loader: 'url' },
       { test: /\.json$/, loader: 'json' }
     ]
-  }
+  },
+  plugins: [
+    new webpack.NoErrorsPlugin()
+  ]
 };

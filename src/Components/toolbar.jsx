@@ -1,5 +1,5 @@
 import {AppBar, IconButton} from 'material-ui';
-import {Typeahead} from 'react-typeahead';
+import Select from 'react-select';
 import titleStore from '../Stores/titleStore.js';
 import favStore from '../Stores/favStore.js';
 import favActions from '../Actions/favActions.js';
@@ -11,6 +11,7 @@ require('./toolbar.less');
 export default class extends React.Component {
   constructor() {
     super();
+    autoBind(this);
     this.searchButton = (
       <IconButton
         iconClassName="md md-search"
@@ -23,8 +24,8 @@ export default class extends React.Component {
   componentDidUpdate() {
     const dom = React.findDOMNode(this);
     const inputs = dom.getElementsByTagName('input');
-    if (inputs.length > 0) {
-      inputs[0].focus();
+    if (inputs.length > 1) {
+      inputs[1].focus();
     }
   }
   componentDidMount() {
@@ -42,21 +43,22 @@ export default class extends React.Component {
     this.unsubscribe();
     this.unsubscribe2();
   }
+  filterOptions(stations, input) {
+    return stationStore.getFilteredOptions(input);
+  }
   openInput() {
-    const style = {
-      input: 'autocomplete'
-    };
     titleActions.changeTitle(
-      <Typeahead
-        options={stationStore.getNames()}
-        maxVisible={7}
-        onOptionSelected={this.submit.bind(this)}
-        customClasses={style}
-        onKeyDown={this.handleKeyDown.bind(this)}/>
+      <Select
+        filterOptions={this.filterOptions}
+        onBlur={this.onBlur}
+        onChange={this.submit}/>
     );
     this.setState({
       station: ''
     });
+  }
+  onBlur() {
+    titleActions.revertTitle();
   }
   handleKeyDown(e) {
     switch (e.keyCode) {
@@ -65,7 +67,10 @@ export default class extends React.Component {
         break;
     }
   }
-  submit(station) {
+  submit(station, selectedOptions) {
+    if (selectedOptions.length > 0) {
+      station = selectedOptions[0].label;
+    }
     if (!station) {
       titleActions.resetTitle();
     } else {

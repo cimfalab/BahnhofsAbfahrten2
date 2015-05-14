@@ -14,5 +14,8 @@
     "no-unused-vars": false,
     "no-debugger": false,
     "new-cap": false
-  }
+  },
+  "plugins": [
+    "react"
+  ]
 }

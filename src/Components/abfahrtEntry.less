@@ -25,8 +25,17 @@
   line-height: 1;
   padding-bottom: 5px;
   padding-top: 5px;
-
   display: flex;
+  user-select: none;
+  transition: 0.3s ease-in-out;
+
+  &.detail {
+    .mid {
+      white-space: normal!important;
+      overflow: visible!important;
+    }
+  }
+
   .train {
     flex: 1;
     @media screen and (max-width: 1200px) {
