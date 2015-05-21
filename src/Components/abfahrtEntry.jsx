@@ -3,7 +3,16 @@ import detailStore from '../Stores/detailStore.js';
 import detailActions from '../Actions/detailActions.js';
 require('./abfahrtEntry.less');
 
-export default class extends React.Component {
+
+function normalizeName(name) {
+  name = name.replace(/([^ ])\(/, '$1 (');
+  name = name.replace(/\)(.)/, ') $1');
+  name = name.replace(/Frankfurt \(M\)/, 'Frankfurt (Main)');
+  return name;
+}
+
+
+class AbfahrtEntry extends React.Component {
   constructor() {
     super();
     autoBind(this);
@@ -27,11 +36,15 @@ export default class extends React.Component {
     var via = [];
     const abfahrten = this.state.detail ? abfahrt.route : abfahrt.via;
     _.each(abfahrten, (v, index) => {
+      if (_.isObject(v) && v.name == null) {
+        return;
+      }
       var className = classNames({
         cancelled: v.isCancelled,
+        additional: v.isAdditional,
         hbf: _.contains((v.name || v).toLowerCase(), 'hbf')
       });
-      via.push(<span className={className}>{v.name || v}</span>);
+      via.push(<span className={className}>{normalizeName(v.name || v)}</span>);
       if (index + 1 !== abfahrten.length) {
         via.push(<span> - </span>);
       }
@@ -49,6 +62,9 @@ export default class extends React.Component {
       }
       info += q.text;
     });
+    for (let i = 1; i < abfahrt.messages.delay.length; i++) {
+      info += ` +++ ${abfahrt.messages.delay[i].text}`;
+    }
     return info ? <div className="info">{info}</div> : null;
   }
   getDelay(abfahrt) {
@@ -71,7 +87,7 @@ export default class extends React.Component {
       info = this.getVia(abfahrt);
     }
     if (this.state.detail) {
-      info = [this.getVia(abfahrt), info];
+      info = [info, this.getVia(abfahrt)];
     }
     const delay = this.getDelay(abfahrt);
     const innerClass = classNames({
@@ -91,7 +107,7 @@ export default class extends React.Component {
         <div className="train">{abfahrt.train}</div>
         <div className="mid">
           {info}
-          <div className="destination">{abfahrt.destination}</div>
+          <div className="destination">{normalizeName(abfahrt.destination)}</div>
         </div>
         <div className="end">
           <div className="time">{abfahrt.time}</div>
@@ -104,3 +120,6 @@ export default class extends React.Component {
     );
   }
 }
+
+
+export default AbfahrtEntry;

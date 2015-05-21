@@ -10,10 +10,18 @@
   },
   "rules": {
     "quotes": [2, "single"],
-    "no-undef": false,
-    "no-unused-vars": false,
     "no-debugger": false,
     "new-cap": false
+  },
+  "globals": {
+    "React": false,
+    "_": false,
+    "When": false,
+    "axios": false,
+    "autoBind": false,
+    "classNames": false,
+    "Reflux": false,
+    "router": false
   },
   "plugins": [
     "react"

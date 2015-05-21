@@ -8,11 +8,8 @@ export default Reflux.createStore({
     this.indexedStations = stationStore.getIndexed();
   },
   listenables: [abfahrtActions],
-  onAddAbfahrt(abfahrt) {
-    this.updateList(this.list.set(counter++, abfahrt));
-  },
   onRemoveAbfahrt(abfahrt) {
-    const [key, item] = this.list.findEntry(v => v === abfahrt);
+    const [key] = this.list.findEntry(v => v === abfahrt);
     if (key) {
       this.updateList(this.list.remove(key));
     }

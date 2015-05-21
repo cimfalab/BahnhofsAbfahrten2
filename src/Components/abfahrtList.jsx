@@ -9,9 +9,9 @@ import { IconButton, Paper } from 'material-ui';
 import AbfahrtEntry from './abfahrtEntry.jsx';
 import Loading from './loading.jsx';
 
-require('./abfahrtList.less');
+import './abfahrtList.less';
 
-export default class extends React.Component {
+class AbfahrtList extends React.Component {
   constructor() {
     super();
     this.favButton = (
@@ -45,7 +45,7 @@ export default class extends React.Component {
         error: null
       });
     });
-    this.unregister2 = favStore.listen(favList => {
+    this.unregister2 = favStore.listen(() => {
       if (favStore.isFaved(this.props.params.station)) {
         favActions.favButton(this.unfavButton);
       } else {
@@ -114,7 +114,8 @@ export default class extends React.Component {
           _.map(this.state.abfahrten, abfahrt => {
             const key = abfahrt.train + abfahrt.time;
             return (
-              <AbfahrtEntry key={key}
+              <AbfahrtEntry
+                key={key}
                 abfahrt={abfahrt}/>
             );
           })
@@ -123,3 +124,5 @@ export default class extends React.Component {
     );
   }
 }
+
+export default AbfahrtList;

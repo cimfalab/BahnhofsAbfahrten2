@@ -1,5 +1,4 @@
 import { Paper } from 'material-ui';
-import { Link } from 'react-router';
 require('./favEntry.less');
 
 export default class extends React.Component {

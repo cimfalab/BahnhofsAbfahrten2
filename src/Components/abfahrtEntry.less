@@ -1,5 +1,6 @@
 .outerEntry {
   box-shadow: 0 1px 0 rgba(0, 0, 0, 0.24)!important;
+  overflow: hidden;
 }
 
 .entry {
@@ -27,12 +28,10 @@
   padding-top: 5px;
   display: flex;
   user-select: none;
-  transition: 0.3s ease-in-out;
 
   &.detail {
     .mid {
       white-space: normal!important;
-      overflow: visible!important;
     }
   }
 
@@ -74,6 +73,7 @@
     flex-direction: column;
     justify-content: space-between;
     align-items: flex-end;
+    margin-left: 15px;
     .time {
       font-size: 2.4em;
     }
@@ -87,7 +87,11 @@
     }
   }
 
-  .cancel {
+  .cancelled {
     text-decoration: line-through;
+  }
+
+  .additional {
+    color: red;
   }
 }

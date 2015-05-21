@@ -2,9 +2,7 @@ import {AppBar, IconButton} from 'material-ui';
 import Select from 'react-select';
 import titleStore from '../Stores/titleStore.js';
 import favStore from '../Stores/favStore.js';
-import favActions from '../Actions/favActions.js';
 import titleActions from '../Actions/titleActions.js';
-import abfahrtActions from '../Actions/abfahrtActions.js';
 import stationStore from '../Stores/stationStore.js';
 require('./toolbar.less');
 
