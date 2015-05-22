@@ -4,11 +4,21 @@
         "browser": true,
         "jquery": true,
         "es6": true,
-        "jasmine": true
+        "node": true
     },
     "ecmaFeatures": {
         "jsx": true,
         "modules": true
+    },
+    "globals": {
+        "React": false,
+        "global": false,
+        "_": false,
+        "autoBind": false,
+        "Reflux": false,
+        "axios": false,
+        "router": false,
+        "classNames": false
     },
     "rules": {
         "quotes": [2, 'single'],
