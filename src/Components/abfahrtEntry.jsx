@@ -39,12 +39,14 @@ class AbfahrtEntry extends React.Component {
       if (_.isObject(v) && v.name == null) {
         return;
       }
+      const name = v.name || v;
+      const lowerName = name.toLowerCase();
       var className = classNames({
         cancelled: v.isCancelled,
         additional: v.isAdditional,
-        hbf: _.contains((v.name || v).toLowerCase(), 'hbf')
+        hbf: _.contains(lowerName, 'hbf') || _.contains(lowerName, 'centraal') || _.contains(lowerName, 'centrale') || _.contains(lowerName, 'termini')
       });
-      via.push(<span className={className}>{normalizeName(v.name || v)}</span>);
+      via.push(<span className={className}>{normalizeName(name)}</span>);
       if (index + 1 !== abfahrten.length) {
         via.push(<span> - </span>);
       }
@@ -71,7 +73,17 @@ class AbfahrtEntry extends React.Component {
     if (!abfahrt.delay || abfahrt.isCancelled) {
       return null;
     }
-    return (<span className="delay">(+{abfahrt.delay})</span>);
+    const className = classNames({
+      delay: abfahrt.delay > 0,
+      early: abfahrt.delay < 0
+    });
+    let delay = abfahrt.delay;
+    if (abfahrt.delay > 0) {
+      delay = `+${delay}`;
+    } else {
+      delay = `-${Math.abs(delay)}`;
+    }
+    return (<span className={className}>({delay})</span>);
   }
   onClick() {
     detailActions.setDetail(this);
