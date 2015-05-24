@@ -4,20 +4,17 @@ import titleStore from '../Stores/titleStore.js';
 import favStore from '../Stores/favStore.js';
 import titleActions from '../Actions/titleActions.js';
 import stationStore from '../Stores/stationStore.js';
-require('./toolbar.less');
+import './toolbar.less';
 
+@autoBind
 export default class extends React.Component {
-  constructor() {
-    super();
-    autoBind(this);
-    this.searchButton = (
-      <IconButton
-        iconClassName="md md-search"
-        onClick={this.openInput.bind(this)}/>
-    );
-    this.state = {
-      title: titleStore.defaultTitle
-    };
+  searchButton = (
+    <IconButton
+      iconClassName="md md-search"
+      onClick={this.openInput.bind(this)}/>
+  )
+  state = {
+    title: titleStore.defaultTitle
   }
   componentDidUpdate() {
     const dom = React.findDOMNode(this);

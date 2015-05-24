@@ -1,4 +1,4 @@
-require('./loading.less');
+import './loading.less';
 
 export default class extends React.Component {
   render() {

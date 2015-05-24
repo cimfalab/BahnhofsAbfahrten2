@@ -5,16 +5,41 @@ global.axios = require('axios');
 global.Reflux = require('reflux');
 global._ = require('lodash');
 global.classNames = require('classnames');
-require('./main.less');
+import './main.less';
 
-function getAllMethods(obj) {
-  return Object.getOwnPropertyNames(obj)
-  .filter(key => _.isFunction(obj[key]));
+
+function boundMethod(target, key, descriptor) {
+  const fn = descriptor.value;
+
+  if (typeof fn !== 'function') {
+    throw new Error(`@autobind decorator can only be applied to methods not: ${typeof fn}`);
+  }
+
+  return {
+    configurable: true,
+    get() {
+      const boundFn = fn.bind(this);
+      Object.defineProperty(this, key, {
+        value: boundFn,
+        configurable: true,
+        writable: true
+      });
+      return boundFn;
+    }
+  };
 }
 
-global.autoBind = function(obj) {
-  getAllMethods(obj.constructor.prototype)
-  .forEach(mtd => {
-    obj[mtd] = obj[mtd].bind(obj);
+global.autoBind = function(target) {
+  Object.getOwnPropertyNames(target.prototype)
+  .forEach(key => {
+    if (key === 'constructor') {
+      return;
+    }
+
+    const descriptor = Object.getOwnPropertyDescriptor(target.prototype, key);
+
+    if (typeof descriptor.value === 'function') {
+      Object.defineProperty(target.prototype, key, boundMethod(target, key, descriptor));
+    }
   });
 };

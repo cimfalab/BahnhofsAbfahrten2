@@ -1,7 +1,7 @@
 import { Paper } from 'material-ui';
 import detailStore from '../Stores/detailStore.js';
 import detailActions from '../Actions/detailActions.js';
-require('./abfahrtEntry.less');
+import './abfahrtEntry.less';
 
 
 function normalizeName(name) {
@@ -11,14 +11,10 @@ function normalizeName(name) {
   return name;
 }
 
-
+@autoBind
 class AbfahrtEntry extends React.Component {
-  constructor() {
-    super();
-    autoBind(this);
-    this.state = {
-      detail: false
-    };
+  state = {
+    detail: false
   }
   componentDidMount() {
     this.unreg = detailStore.listen(entry => {
@@ -107,14 +103,11 @@ class AbfahrtEntry extends React.Component {
       cancelled: abfahrt.isCancelled,
       detail: this.state.detail
     });
-    const paperClasses = classNames({
-      outerEntry: true
-    });
     return (
       <Paper
         onClick={this.onClick}
         zIndex={1}
-        className={paperClasses}
+        className="outerEntry"
         innerClassName={innerClass}>
         <div className="train">{abfahrt.train}</div>
         <div className="mid">

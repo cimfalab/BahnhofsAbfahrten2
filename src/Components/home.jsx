@@ -5,12 +5,12 @@ import titleActions from '../Actions/titleActions.js';
 import { Paper } from 'material-ui';
 
 export default class extends React.Component {
+  state = {
+    favs: favStore.getAll()
+  }
   constructor() {
     super();
     titleActions.resetTitle();
-    this.state = {
-      favs: favStore.getAll()
-    };
   }
   componentDidMount() {
     this.unregister = favStore.listen(list => this.setState({ favs: list }));

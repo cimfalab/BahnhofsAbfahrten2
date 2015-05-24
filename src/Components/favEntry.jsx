@@ -1,5 +1,5 @@
 import { Paper } from 'material-ui';
-require('./favEntry.less');
+import './favEntry.less';
 
 export default class extends React.Component {
   transitionTo() {

@@ -11,22 +11,20 @@ import Loading from './loading.jsx';
 
 import './abfahrtList.less';
 
+
 class AbfahrtList extends React.Component {
-  constructor() {
-    super();
-    this.favButton = (
-      <IconButton
-        iconClassName="md md-favorite-outline"
-        onClick={this.fav.bind(this)}/>
-    );
-    this.unfavButton = (
-      <IconButton
-        iconClassName="md md-favorite"
-        onClick={this.unfav.bind(this)}/>
-    );
-    this.state = {
-      abfahrten: []
-    };
+  favButton = (
+    <IconButton
+      iconClassName="md md-favorite-outline"
+      onClick={this.fav.bind(this)}/>
+  )
+  unfavButton = (
+    <IconButton
+      iconClassName="md md-favorite"
+      onClick={this.unfav.bind(this)}/>
+  )
+  state = {
+    abfahrten: []
   }
   fav() {
     favActions.fav(this.props.params.station);
