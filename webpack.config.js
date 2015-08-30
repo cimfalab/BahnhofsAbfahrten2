@@ -3,7 +3,7 @@ var webpack = require('webpack');
 
 module.exports = {
   eslint: {
-    configFile: './.eslintrc',
+    configFile: 'src/.eslintrc',
     failOnWarning: true,
     failOnError: true
   },
@@ -18,8 +18,8 @@ module.exports = {
   },
   module: {
     loaders: [
-      { test: /\.less$/, loader: 'style!css!autoprefixer?browsers=last 2 version!less' },
-      { test: /\.jsx?$/, exclude: /node_modules/, loader: 'babel-loader?stage=0&optional=runtime!eslint', include: path.join(__dirname, 'src')},
+      { test: /\.css$/, loader: 'style!css' },
+      { test: /\.jsx?$/, exclude: /node_modules/, loader: 'react-hot!babel!eslint', include: path.join(__dirname, 'src')},
       { test: /\.(jpg|png|gif)$/, loader: 'file!image' },
       { test: /\.woff2?(\?v=.*)?$/, loader: 'url?limit=10000&minetype=application/font-woff' },
       { test: /\.(eot|ttf|svg|otf)(\?v=.*)?$/, loader: 'url' },

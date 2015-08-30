@@ -1,3 +1,4 @@
+import Reflux from 'reflux';
 import detailActions from '../Actions/detailActions.js';
 
 export default Reflux.createStore({

@@ -1,5 +1,6 @@
 import titleActions from '../Actions/titleActions.js';
 import favActions from '../Actions/favActions.js';
+import Reflux from 'reflux';
 
 export default Reflux.createStore({
   init() {

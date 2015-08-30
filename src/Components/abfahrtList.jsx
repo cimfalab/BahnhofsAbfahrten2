@@ -1,35 +1,35 @@
-import abfahrtStore from '../Stores/abfahrtStore.js';
+import AbfahrtEntry from './AbfahrtEntry.jsx';
+import Loading from './Loading.jsx';
+import React from 'react';
 import abfahrtActions from '../Actions/abfahrtActions.js';
-import titleActions from '../Actions/titleActions.js';
-import favStore from '../Stores/favStore.js';
+import abfahrtStore from '../Stores/abfahrtStore.js';
 import favActions from '../Actions/favActions.js';
+import favStore from '../Stores/favStore.js';
+import titleActions from '../Actions/titleActions.js';
+import {Paper} from 'material-ui';
 
-import { IconButton, Paper } from 'material-ui';
-
-import AbfahrtEntry from './abfahrtEntry.jsx';
-import Loading from './loading.jsx';
-
-import './abfahrtList.less';
 
 
 class AbfahrtList extends React.Component {
-  favButton = (
-    <IconButton
-      iconClassName="md md-favorite-outline"
-      onClick={this.fav.bind(this)}/>
-  )
-  unfavButton = (
-    <IconButton
-      iconClassName="md md-favorite"
-      onClick={this.unfav.bind(this)}/>
-  )
+  static propTypes = {
+    params: React.PropTypes.shape({
+      station: React.PropTypes.string
+    })
+  }
+  static style = {
+    list: {
+      display: 'flex',
+      flexDirection: 'column',
+      overflow: 'auto'
+    }
+  }
   state = {
     abfahrten: []
   }
-  fav() {
+  fav = () => {
     favActions.fav(this.props.params.station);
   }
-  unfav() {
+  unfav = () => {
     favActions.unfav(this.props.params.station);
   }
   componentWillReceiveProps(newProps) {
@@ -45,12 +45,18 @@ class AbfahrtList extends React.Component {
     });
     this.unregister2 = favStore.listen(() => {
       if (favStore.isFaved(this.props.params.station)) {
-        favActions.favButton(this.unfavButton);
+        favActions.favButton({
+          type: 'unfav',
+          fn: this.unfav
+        });
       } else {
-        favActions.favButton(this.favButton);
+        favActions.favButton({
+          type: 'fav',
+          fn: this.fav
+        });
       }
     });
-    var fn = this.handleError.bind(this);
+    const fn = this.handleError.bind(this);
     abfahrtStore.emitter.addListener('error', fn);
     this.unregister3 = () => abfahrtStore.emitter.removeListener('error', fn);
     this.getAbfahrten(this.props.params.station.replace('%2F', '/'));
@@ -64,9 +70,15 @@ class AbfahrtList extends React.Component {
     abfahrtActions.requestAbfahrten(station);
     titleActions.changeTitle(station);
     if (favStore.isFaved(station)) {
-      favActions.favButton(this.unfavButton);
+      favActions.favButton({
+        type: 'unfav',
+        fn: this.unfav
+      });
     } else {
-      favActions.favButton(this.favButton);
+      favActions.favButton({
+        type: 'fav',
+        fn: this.fav
+      });
     }
   }
   componentWillUnmount() {
@@ -85,19 +97,19 @@ class AbfahrtList extends React.Component {
       if (!errorContent) {
         errorContent = (
           <span>
-            Well this did not work.
-            <br/>
-            {this.state.error}
-            <br/>
-            <a
-              href="https://github.com/marudor/BahnhofsAbfahrten/issues"
-              target="_new">Issue erstellen</a>
+          Well this did not work.
+          <br/>
+          {this.state.error}
+          <br/>
+          <a
+          href="https://github.com/marudor/BahnhofsAbfahrten/issues"
+          target="_new">Issue erstellen</a>
           </span>
         );
       }
       return (
         <Paper className="error">
-          {errorContent}
+        {errorContent}
         </Paper>
       );
     }
@@ -106,18 +118,19 @@ class AbfahrtList extends React.Component {
         <Loading/>
       );
     }
+    const style = AbfahrtList.style;
     return (
-      <div className="abfahrtList">
-        {
-          _.map(this.state.abfahrten, abfahrt => {
-            const key = abfahrt.train + abfahrt.time;
-            return (
-              <AbfahrtEntry
-                key={key}
-                abfahrt={abfahrt}/>
-            );
-          })
-        }
+      <div style={style.list}>
+      {
+        _.map(this.state.abfahrten, (abfahrt) => {
+          const key = abfahrt.train + abfahrt.time;
+          return (
+            <AbfahrtEntry
+            key={key}
+            abfahrt={abfahrt}/>
+          );
+        })
+      }
       </div>
     );
   }

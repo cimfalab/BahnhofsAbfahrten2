@@ -1,8 +1,8 @@
 import favStore from '../Stores/favStore.js';
-import FavEntry from '../Components/favEntry.jsx';
+import FavEntry from './FavEntry.jsx';
 import titleActions from '../Actions/titleActions.js';
-
-import { Paper } from 'material-ui';
+import React from 'react';
+import {Paper} from 'material-ui';
 
 export default class extends React.Component {
   state = {
@@ -13,7 +13,7 @@ export default class extends React.Component {
     titleActions.resetTitle();
   }
   componentDidMount() {
-    this.unregister = favStore.listen(list => this.setState({ favs: list }));
+    this.unregister = favStore.listen(list => this.setState({favs: list}));
   }
   componentWillUnmount() {
     this.unregister();
@@ -21,7 +21,7 @@ export default class extends React.Component {
   render() {
     if (_.isEmpty(this.state.favs)) {
       return (
-        <Paper className="fav">
+        <Paper>
           Leider keine Favs :(
         </Paper>
       );

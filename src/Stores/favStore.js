@@ -1,5 +1,6 @@
 import favActions from '../Actions/favActions.js';
-import { Map } from 'immutable';
+import Reflux from 'reflux';
+import {Map} from 'immutable';
 
 const localStorageKey = 'favs';
 

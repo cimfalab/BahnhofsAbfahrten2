@@ -1,18 +1,21 @@
-import {AppBar, IconButton} from 'material-ui';
+import React from 'react';
 import Select from 'react-select';
-import titleStore from '../Stores/titleStore.js';
 import favStore from '../Stores/favStore.js';
-import titleActions from '../Actions/titleActions.js';
 import stationStore from '../Stores/stationStore.js';
-import './toolbar.less';
+import titleActions from '../Actions/titleActions.js';
+import titleStore from '../Stores/titleStore.js';
+import {AppBar, IconButton} from 'material-ui';
 
-@autoBind
-export default class extends React.Component {
-  searchButton = (
-    <IconButton
-      iconClassName="md md-search"
-      onClick={this.openInput.bind(this)}/>
-  )
+export default class Toolbar extends React.Component {
+  static style = {
+    appBar: {
+      alignItems: 'center'
+    },
+    icons: {
+      display: 'block',
+      marginTop: -8
+    }
+  }
   state = {
     title: titleStore.defaultTitle
   }
@@ -30,7 +33,19 @@ export default class extends React.Component {
         oldTitle
       });
     });
-    const fn = fav => this.setState({fav});
+    const fn = (fav) => {
+      if (fav) {
+        this.setState({
+          fav: fav.type,
+          favFn: fav.fn
+        });
+      } else {
+        this.setState({
+          fav: null,
+          favFn: null
+        });
+      }
+    };
     favStore.emitter.addListener('favButton', fn);
     this.unsubscribe2 = () => favStore.emitter.removeListener('favButton', fn);
   }
@@ -41,25 +56,22 @@ export default class extends React.Component {
   filterOptions(stations, input) {
     return stationStore.getFilteredOptions(input);
   }
-  openInput() {
+  openInput = () => {
     titleActions.changeTitle(
-      <Select
-        filterOptions={this.filterOptions}
-        onBlur={this.onBlur}
-        onChange={this.submit}/>
+      <Select filterOptions={this.filterOptions} onBlur={this.onBlur} onChange={this.submit}/>
     );
     this.setState({
       station: ''
     });
   }
-  onBlur() {
+  onBlur = () => {
     titleActions.revertTitle();
   }
-  handleKeyDown(e) {
+  handleKeyDown = e => {
     switch (e.keyCode) {
       case 27: //Escape
-        titleActions.revertTitle();
-        break;
+      titleActions.revertTitle();
+      break;
     }
   }
   submit(station, selectedOptions) {
@@ -76,13 +88,28 @@ export default class extends React.Component {
     });
   }
   render() {
-    var searchIcon = _.isString(this.state.title) ? this.searchButton : '';
-    var icons = (<span>{searchIcon}{this.state.fav}</span>);
+    const style = Toolbar.style;
+    const {title, fav, favFn} = this.state;
+    const searchIcon = _.isString(title) ? (
+      <IconButton
+      iconClassName="mi mi-search"
+      onClick={this.openInput}/>
+    ) : '';
+    let favClass;
+    let favBtn;
+    if (fav === 'fav') {
+      favClass = 'mi mi-favorite-border';
+      favBtn = (<IconButton iconClassName={favClass} onClick={favFn}/>);
+    } else if (fav === 'unfav') {
+      favClass = 'mi mi-favorite';
+      favBtn = (<IconButton iconClassName={favClass} onClick={favFn}/>);
+    }
+    const icons = (<span style={style.icons}>{searchIcon}{favBtn}</span>);
     return (
-      <AppBar
-        showMenuIconButton={false}
-        title={this.state.title}
-        iconElementRight={icons}/>
+      <AppBar style={style.appBar}
+      showMenuIconButton={false}
+      title={this.state.title}
+      iconElementRight={icons}/>
     );
   }
 }
