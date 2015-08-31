@@ -11,6 +11,10 @@ export default class Toolbar extends React.Component {
     appBar: {
       alignItems: 'center'
     },
+    icon: {
+      color: 'white',
+      fill: 'white'
+    },
     icons: {
       display: 'block',
       marginTop: -8
@@ -92,24 +96,25 @@ export default class Toolbar extends React.Component {
     const {title, fav, favFn} = this.state;
     const searchIcon = _.isString(title) ? (
       <IconButton
-      iconClassName="mi mi-search"
-      onClick={this.openInput}/>
+        iconStyle={style.icon}
+        iconClassName="mi mi-search"
+        onClick={this.openInput}/>
     ) : '';
     let favClass;
     let favBtn;
     if (fav === 'fav') {
       favClass = 'mi mi-favorite-border';
-      favBtn = (<IconButton iconClassName={favClass} onClick={favFn}/>);
+      favBtn = (<IconButton iconStyle={style.icon} iconClassName={favClass} onClick={favFn}/>);
     } else if (fav === 'unfav') {
       favClass = 'mi mi-favorite';
-      favBtn = (<IconButton iconClassName={favClass} onClick={favFn}/>);
+      favBtn = (<IconButton iconStyle={style.icon} iconClassName={favClass} onClick={favFn}/>);
     }
     const icons = (<span style={style.icons}>{searchIcon}{favBtn}</span>);
     return (
       <AppBar style={style.appBar}
-      showMenuIconButton={false}
-      title={this.state.title}
-      iconElementRight={icons}/>
+        showMenuIconButton={false}
+        title={this.state.title}
+        iconElementRight={icons}/>
     );
   }
 }
