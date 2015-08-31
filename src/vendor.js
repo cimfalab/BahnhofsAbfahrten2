@@ -5,6 +5,5 @@ global.axios = require('axios');
 global.Reflux = require('reflux');
 global._ = require('lodash');
 global.classNames = require('classnames');
-import './main.less';
 import 'react-select/dist/default.css';
 import 'bootstrap-material-icons/css/material-icons.min.css';
