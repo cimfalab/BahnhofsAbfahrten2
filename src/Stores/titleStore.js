@@ -1,25 +1,24 @@
-import titleActions from '../Actions/titleActions.js';
-import favActions from '../Actions/favActions.js';
-import Reflux from 'reflux';
+import EventEmitter from 'eventemitter';
+import favStore from './favStore.js';
 
-export default Reflux.createStore({
-  init() {
-    this.defaultTitle = this.title = 'Bahnhofs Abfahrten';
-  },
-  listenables: [titleActions],
-  onResetTitle() {
+class TitleStore extends EventEmitter {
+  defaultTitle = 'Bahnhofs Abfahrten'
+  title = 'Bahnhofs Abfahrten'
+  resetTitle() {
     this.setTitle(this.defaultTitle);
-    favActions.favButton(null);
-  },
-  onChangeTitle(title) {
+    favStore.favButton(null);
+  }
+  changeTitle(title) {
     this.setTitle(title);
-  },
-  onRevertTitle() {
+  }
+  revertTitle() {
     this.setTitle(this.oldTitle);
-  },
+  }
   setTitle(title) {
     this.oldTitle = this.title;
     this.title = title;
-    this.trigger(this.title);
+    this.emit('title', this.title);
   }
-});
+}
+
+export default new TitleStore();

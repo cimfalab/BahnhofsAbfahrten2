@@ -1,6 +1,5 @@
 import Radium from 'radium';
 import React from 'react';
-import detailActions from '../Actions/detailActions.js';
 import detailStore from '../Stores/detailStore.js';
 import {Paper} from 'material-ui';
 
@@ -108,17 +107,15 @@ export default class AbfahrtEntry extends React.Component {
   state = {
     detail: false
   }
-  componentDidMount() {
-    this.unreg = detailStore.listen(entry => {
-      if (entry !== this) {
-        this.setState({
-          detail: false
-        });
-      }
-    });
+  handleDetail = entry => {
+    if (entry !== this) {
+      this.setState({
+        detail: false
+      });
+    }
   }
   componentWillUnmount() {
-    this.unreg();
+    detailStore.off('detail', this.handleDetail);
   }
   getVia(abfahrt, isCancelled) {
     const via = [];
@@ -169,7 +166,8 @@ export default class AbfahrtEntry extends React.Component {
     return (<span style={delay > 0 ? style.delay : style.early}>({delay})</span>);
   }
   onClick = () => {
-    detailActions.setDetail(this);
+    detailStore.setDetail(this);
+    detailStore.on('detail', this.handleDetail);
     const newVal = !this.state.detail;
     this.setState({
       detail: newVal

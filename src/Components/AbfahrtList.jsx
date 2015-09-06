@@ -1,11 +1,9 @@
 import AbfahrtEntry from './AbfahrtEntry.jsx';
 import Loading from './Loading.jsx';
 import React from 'react';
-import abfahrtActions from '../Actions/abfahrtActions.js';
 import abfahrtStore from '../Stores/abfahrtStore.js';
-import favActions from '../Actions/favActions.js';
 import favStore from '../Stores/favStore.js';
-import titleActions from '../Actions/titleActions.js';
+import titleStore from '../Stores/titleStore.js';
 import {Paper} from 'material-ui';
 
 
@@ -27,64 +25,64 @@ class AbfahrtList extends React.Component {
     abfahrten: []
   }
   fav = () => {
-    favActions.fav(this.props.params.station);
+    favStore.fav(this.props.params.station);
   }
   unfav = () => {
-    favActions.unfav(this.props.params.station);
+    favStore.unfav(this.props.params.station);
   }
   componentWillReceiveProps(newProps) {
-    abfahrtActions.clearAbfahrten();
+    abfahrtStore.clearAbfahrten();
     this.getAbfahrten(newProps.params.station.replace('%2F', '/'));
   }
-  componentDidMount() {
-    this.unregister = abfahrtStore.listen(abfahrten => {
-      this.setState({
-        abfahrten,
-        error: null
-      });
-    });
-    this.unregister2 = favStore.listen(() => {
-      if (favStore.isFaved(this.props.params.station)) {
-        favActions.favButton({
-          type: 'unfav',
-          fn: this.unfav
-        });
-      } else {
-        favActions.favButton({
-          type: 'fav',
-          fn: this.fav
-        });
-      }
-    });
-    const fn = this.handleError.bind(this);
-    abfahrtStore.emitter.addListener('error', fn);
-    this.unregister3 = () => abfahrtStore.emitter.removeListener('error', fn);
-    this.getAbfahrten(this.props.params.station.replace('%2F', '/'));
-  }
-  handleError(error) {
+  handleAbfahrten = abfahrten => {
     this.setState({
-      error
+      abfahrten,
+      error: null
     });
   }
-  getAbfahrten(station) {
-    abfahrtActions.requestAbfahrten(station);
-    titleActions.changeTitle(station);
-    if (favStore.isFaved(station)) {
-      favActions.favButton({
+  handleFav = () => {
+    if (favStore.isFaved(this.props.params.station)) {
+      favStore.favButton({
         type: 'unfav',
         fn: this.unfav
       });
     } else {
-      favActions.favButton({
+      favStore.favButton({
         type: 'fav',
         fn: this.fav
       });
     }
   }
+  handleError = error => {
+    this.setState({
+      error
+    });
+  }
+  componentDidMount() {
+    abfahrtStore.on('abfahrten', this.handleAbfahrten);
+    abfahrtStore.on('error', this.handleError);
+    favStore.on('fav', this.handleFav);
+    this.getAbfahrten(this.props.params.station.replace('%2F', '/'));
+  }
   componentWillUnmount() {
-    this.unregister();
-    this.unregister2();
-    this.unregister3();
+    abfahrtStore.off('abfahrten', this.handleAbfahrten);
+    abfahrtStore.off('error', this.handleError);
+    favStore.off('fav', this.handleFav);
+  }
+  getAbfahrten(station) {
+    abfahrtStore.requestAbfahrten(station);
+    titleStore.changeTitle(station);
+    if (favStore.isFaved(station)) {
+      favStore.favButton({
+        type: 'unfav',
+        fn: this.unfav
+      });
+    } else {
+      favStore.favButton({
+        type: 'fav',
+        fn: this.fav
+      });
+    }
   }
   beautifyError(error) {
     if (_.contains(error, 'Got no results')) {

@@ -16,6 +16,11 @@ module.exports = {
     filename: 'app.js',
     publicPath: ''
   },
+  resolve: {
+    alias: {
+      eventemitter: 'eventemitter3'
+    }
+  },
   module: {
     loaders: [
       { test: /\.css$/, loader: 'style!css' },

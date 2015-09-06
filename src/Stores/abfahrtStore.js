@@ -1,52 +1,52 @@
-import abfahrtActions from '../Actions/abfahrtActions.js';
 import stationStore from './stationStore.js';
 import {List} from 'immutable';
 import axios from 'axios';
-import Reflux from 'reflux';
+import EventEmitter from 'eventemitter';
 
-export default Reflux.createStore({
-  init() {
-    this.list = List();
-    this.indexedStations = stationStore.getIndexed();
-  },
-  listenables: [abfahrtActions],
-  onRemoveAbfahrt(abfahrt) {
+class AbfahrtStore extends EventEmitter {
+  list = List()
+  indexedStations = stationStore.getIndexed()
+  constructor() {
+    super();
+  }
+  removeAbfahrt(abfahrt) {
     const [key] = this.list.findEntry(v => v === abfahrt);
     if (key) {
       this.updateList(this.list.remove(key));
     }
-  },
-  onRequestAbfahrten(station) {
+  }
+  async requestAbfahrten(station) {
     station = this.indexedStations[station] || station;
-    axios.get(`http://dbf.finalrewind.org/${station}`, {
+    const abfahrten = await axios.get(`http://dbf.finalrewind.org/${station}`, {
       params: {
         mode: 'marudor',
         backend: 'iris',
         version: 1
       }
-    }).then(abfahrten => {
-      if (abfahrten.data.error) {
-        abfahrtActions.error(abfahrten.data.error);
-      } else {
-        abfahrtActions.receiveAbfahrten(abfahrten.data.departures);
-      }
     });
-  },
-  onError(error) {
-    this.emitter.emit('error', error);
-  },
-  onReceiveAbfahrten(abfahrten) {
+    if (abfahrten.data.error) {
+      this.error(abfahrten.data.error);
+    } else {
+      this.receiveAbfahrten(abfahrten.data.departures);
+    }
+  }
+  error(error) {
+    this.emit('error', error);
+  }
+  receiveAbfahrten(abfahrten) {
     this.list = this.list.clear();
     _.each(abfahrten, abfahrt => {
       this.list = this.list.push(abfahrt);
     });
-    this.trigger(this.list.toJS());
-  },
-  onClearAbfahrten() {
+    this.emit('abfahrten', this.list.toJS());
+  }
+  clearAbfahrten() {
     this.updateList(this.list.clear());
-  },
+  }
   updateList(list) {
     this.list = list;
-    this.trigger(this.list.toJS());
+    this.emit('abfahrten', this.list.toJS());
   }
-});
+}
+
+export default new AbfahrtStore();

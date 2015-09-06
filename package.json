@@ -29,8 +29,7 @@
     "axios": "^0.5.4",
     "babel-runtime": "^5.2.17",
     "bootstrap-material-icons": "^0.3.0",
-    "classnames": "^2.1.1",
-    "flux": "^2.0.3",
+    "eventemitter3": "^1.1.1",
     "fuzzaldrin": "^2.1.0",
     "immutable": "^3.7.2",
     "lodash": "^3.8.0",
@@ -39,7 +38,6 @@
     "react": "^0.13.3",
     "react-router": "^0.13.3",
     "react-select": "^0.6.7",
-    "reflux": "^0.2.7",
     "when": "^3.7.3"
   }
 }

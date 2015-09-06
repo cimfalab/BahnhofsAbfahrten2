@@ -1,39 +1,40 @@
-import favActions from '../Actions/favActions.js';
-import Reflux from 'reflux';
 import {Map} from 'immutable';
+import EventEmitter from 'eventemitter';
 
 const localStorageKey = 'favs';
 
-export default Reflux.createStore({
-  init() {
-    this.list = Map();
+class FavStore extends EventEmitter {
+  list = Map()
+  constructor() {
+    super();
     const loadedList = JSON.parse(localStorage.getItem(localStorageKey));
     if (loadedList) {
       _.each(loadedList, (fav, station) => {
         this.list = this.list.set(station, fav);
       });
-      this.trigger(this.list.toJS());
+      this.emit('fav', this.list.toJS());
     }
-  },
-  listenables: [favActions],
-  onFav(station) {
+  }
+  fav(station) {
     this.updateList(this.list.set(station, true));
-  },
-  onUnfav(station) {
+  }
+  unfav(station) {
     this.updateList(this.list.remove(station));
-  },
-  onFavButton(button) {
-    this.emitter.emit('favButton', button);
-  },
+  }
+  favButton(button) {
+    this.emit('favButton', button);
+  }
   isFaved(station) {
     return this.list.has(station);
-  },
+  }
   getAll() {
     return this.list.toJS();
-  },
+  }
   updateList(list) {
     this.list = list;
     localStorage.setItem(localStorageKey, JSON.stringify(list.toJS()));
-    this.trigger(list.toJS());
+    this.emit('fav', list.toJS());
   }
-});
+}
+
+export default new FavStore();

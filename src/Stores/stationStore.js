@@ -7,7 +7,6 @@ const stations = _.map(require('../BahnhofCode.json'), station => {
 import {filter} from 'fuzzaldrin';
 
 
-
 export default class {
   static getAll() {
     return stations;

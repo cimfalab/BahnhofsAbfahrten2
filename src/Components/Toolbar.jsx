@@ -2,7 +2,6 @@ import React from 'react';
 import Select from 'react-select';
 import favStore from '../Stores/favStore.js';
 import stationStore from '../Stores/stationStore.js';
-import titleActions from '../Actions/titleActions.js';
 import titleStore from '../Stores/titleStore.js';
 import {AppBar, IconButton} from 'material-ui';
 
@@ -30,38 +29,38 @@ export default class Toolbar extends React.Component {
       inputs[1].focus();
     }
   }
-  componentDidMount() {
-    this.unsubscribe1 = titleStore.listen((title, oldTitle) => {
-      this.setState({
-        title,
-        oldTitle
-      });
+  handleTitle = (title, oldTitle) => {
+    this.setState({
+      title,
+      oldTitle
     });
-    const fn = (fav) => {
-      if (fav) {
-        this.setState({
-          fav: fav.type,
-          favFn: fav.fn
-        });
-      } else {
-        this.setState({
-          fav: null,
-          favFn: null
-        });
-      }
-    };
-    favStore.emitter.addListener('favButton', fn);
-    this.unsubscribe2 = () => favStore.emitter.removeListener('favButton', fn);
+  }
+  handleFav = (fav) => {
+    if (fav) {
+      this.setState({
+        fav: fav.type,
+        favFn: fav.fn
+      });
+    } else {
+      this.setState({
+        fav: null,
+        favFn: null
+      });
+    }
+  }
+  componentDidMount() {
+    titleStore.on('title', this.handleTitle);
+    favStore.on('favButton', this.handleFav);
   }
   componentWillUnmount() {
-    this.unsubscribe();
-    this.unsubscribe2();
+    titleStore.off('title', this.handleTitle);
+    favStore.off('favButton', this.handleFav);
   }
   filterOptions(stations, input) {
     return stationStore.getFilteredOptions(input);
   }
   openInput = () => {
-    titleActions.changeTitle(
+    titleStore.changeTitle(
       <Select filterOptions={this.filterOptions} onBlur={this.onBlur} onChange={this.submit}/>
     );
     this.setState({
@@ -69,12 +68,12 @@ export default class Toolbar extends React.Component {
     });
   }
   onBlur = () => {
-    titleActions.revertTitle();
+    titleStore.revertTitle();
   }
   handleKeyDown = e => {
     switch (e.keyCode) {
       case 27: //Escape
-      titleActions.revertTitle();
+      titleStore.revertTitle();
       break;
     }
   }
@@ -83,9 +82,9 @@ export default class Toolbar extends React.Component {
       station = selectedOptions[0].label;
     }
     if (!station) {
-      titleActions.resetTitle();
+      titleStore.resetTitle();
     } else {
-      titleActions.changeTitle(station);
+      titleStore.changeTitle(station);
     }
     global.router.transitionTo('abfahrten', {
       station: station.replace('/', '%2F')

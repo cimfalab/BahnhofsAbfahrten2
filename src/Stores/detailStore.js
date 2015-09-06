@@ -1,9 +1,9 @@
-import Reflux from 'reflux';
-import detailActions from '../Actions/detailActions.js';
+import EventEmitter from 'eventemitter';
 
-export default Reflux.createStore({
-  listenables: [detailActions],
-  onSetDetail(entry) {
-    this.trigger(entry);
+class DetailStore extends EventEmitter {
+  setDetail(entry) {
+    this.emit('detail', entry);
   }
-});
+}
+
+export default new DetailStore();
