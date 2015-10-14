@@ -2,7 +2,6 @@ global.React = require('react');
 global.When = require('when');
 global.Promise = global.When.Promise;
 global.axios = require('axios');
-global.Reflux = require('reflux');
 global._ = require('lodash');
 global.classNames = require('classnames');
 import 'react-select/dist/default.css';
