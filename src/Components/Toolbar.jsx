@@ -50,10 +50,12 @@ export default class Toolbar extends React.Component {
   }
   componentDidMount() {
     titleStore.on('title', this.handleTitle);
+    titleStore.on('openInput', this.openInput);
     favStore.on('favButton', this.handleFav);
   }
   componentWillUnmount() {
     titleStore.off('title', this.handleTitle);
+    titleStore.off('openInput', this.openInput);
     favStore.off('favButton', this.handleFav);
   }
   filterOptions(stations, input) {
@@ -92,8 +94,8 @@ export default class Toolbar extends React.Component {
   }
   render() {
     const style = Toolbar.style;
-    const {title, fav, favFn} = this.state;
-    const searchIcon = _.isString(title) ? (
+    const {fav, favFn, station} = this.state;
+    const searchIcon = !station ? (
       <IconButton
         iconStyle={style.icon}
         iconClassName="mi mi-search"

@@ -3,14 +3,20 @@ import Radium, {Style} from 'radium';
 import React from 'react';
 import Toolbar from './Toolbar.jsx';
 import {RouteHandler} from 'react-router';
-import {Styles} from 'material-ui';
+import ThemeManager from 'material-ui/lib/styles/theme-manager';
+import LightRawTheme from 'material-ui/lib/styles/raw-themes/light-raw-theme';
 
-const ThemeManager = new Styles.ThemeManager();
+const theme = ThemeManager.getMuiTheme(LightRawTheme);
 
 @Radium
 export default class App extends React.Component {
   static childContextTypes = {
     muiTheme: React.PropTypes.object.isRequired
+  }
+  getChildContext() {
+    return {
+      muiTheme: theme
+    };
   }
   static style = {
     wrapper: {
@@ -18,11 +24,6 @@ export default class App extends React.Component {
       flexDirection: 'column',
       height: '100%'
     }
-  }
-  getChildContext() {
-    return {
-      muiTheme: ThemeManager.getCurrentTheme()
-    };
   }
   render() {
     const style = App.style;

@@ -71,7 +71,7 @@ class AbfahrtList extends React.Component {
   }
   getAbfahrten(station) {
     abfahrtStore.requestAbfahrten(station);
-    titleStore.changeTitle(station);
+    titleStore.changeTitle(titleStore.getTitle(station));
     if (favStore.isFaved(station)) {
       favStore.favButton({
         type: 'unfav',
