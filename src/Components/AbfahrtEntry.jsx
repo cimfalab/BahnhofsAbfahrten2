@@ -1,7 +1,9 @@
+/* @flow */
+
 import Radium from 'radium';
 import React from 'react';
 import detailStore from '../Stores/detailStore.js';
-import {Paper} from 'material-ui';
+import { Paper } from 'material-ui';
 
 
 function normalizeName(name) {
@@ -14,13 +16,13 @@ function normalizeName(name) {
 @Radium
 export default class AbfahrtEntry extends React.Component {
   static propTypes = {
-    abfahrt: React.PropTypes.object
+    abfahrt: React.PropTypes.object,
   }
   static style = {
     wrapper: {
       boxShadow: '0 1px 0 rgba(0, 0, 0, 0.24)',
       overflow: 'hidden',
-      marginBottom: 5
+      marginBottom: 5,
     },
     entry: {
       display: 'flex',
@@ -30,19 +32,19 @@ export default class AbfahrtEntry extends React.Component {
       paddingTop: 5,
       userSelect: 'none',
       '@media screen and (max-width: 1200px)': {
-        fontSize: '0.3em'
-      }
+        fontSize: '0.3em',
+      },
     },
     cancelled: {
-      textDecoration: 'line-through'
+      textDecoration: 'line-through',
     },
     detail: {
       mid: {
-        whiteSpace: 'normal'
+        whiteSpace: 'normal',
       },
       hbf: {
-        fontWeight: 'bold'
-      }
+        fontWeight: 'bold',
+      },
     },
     train: {
       flex: 1,
@@ -50,8 +52,8 @@ export default class AbfahrtEntry extends React.Component {
       lineHeight: 1.2,
       maxWidth: 280,
       '@media screen and (max-width: 1200px)': {
-        maxWidth: 75
-      }
+        maxWidth: 75,
+      },
     },
     mid: {
       display: 'flex',
@@ -59,58 +61,58 @@ export default class AbfahrtEntry extends React.Component {
       flexDirection: 'column',
       justifyContent: 'space-between',
       lineHeight: 1.2,
-      whiteSpace: 'nowrap'
+      whiteSpace: 'nowrap',
     },
     destination: {
-      fontSize: '4em'
+      fontSize: '4em',
     },
     via: {
       fontSize: '2.1em',
       lineHeight: 1.2,
       overflow: 'hidden',
-      textOverflow: 'ellipsis'
+      textOverflow: 'ellipsis',
     },
     info: {
       textDecoration: 'none',
       color: 'red',
       fontSize: '2.1em',
       overflow: 'hidden',
-      textOverflow: 'ellipsis'
+      textOverflow: 'ellipsis',
     },
     end: {
       alignItems: 'flex-end',
       display: 'flex',
       flexDirection: 'column',
       justifyContent: 'space-between',
-      marginLeft: 15
+      marginLeft: 15,
     },
     time: {
-      fontSize: '2.4em'
+      fontSize: '2.4em',
     },
     early: {
       color: 'green',
       fontSize: '3em',
-      marginRight: '0.4em'
+      marginRight: '0.4em',
     },
     delay: {
       color: 'red',
       fontSize: '3em',
-      marginRight: '0.4em'
+      marginRight: '0.4em',
     },
     platform: {
-      fontSize: '3em'
+      fontSize: '3em',
     },
     additional: {
-      color: 'red'
-    }
+      color: 'red',
+    },
   }
   state = {
-    detail: false
+    detail: false,
   }
   handleDetail = entry => {
     if (entry !== this) {
       this.setState({
-        detail: false
+        detail: false,
       });
     }
   }
@@ -170,11 +172,11 @@ export default class AbfahrtEntry extends React.Component {
     detailStore.on('detail', this.handleDetail);
     const newVal = !this.state.detail;
     this.setState({
-      detail: newVal
+      detail: newVal,
     });
   }
   render() {
-    const {detail} = this.state;
+    const { detail } = this.state;
     const abfahrt = this.props.abfahrt;
     let info = this.getInfo(abfahrt);
     const cancel = abfahrt.isCancelled;

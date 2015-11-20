@@ -1,5 +1,7 @@
+/* @flow */
+
 import stationStore from './stationStore.js';
-import {List} from 'immutable';
+import { List } from 'immutable';
 import axios from 'axios';
 import EventEmitter from 'eventemitter';
 
@@ -21,13 +23,13 @@ class AbfahrtStore extends EventEmitter {
       params: {
         mode: 'marudor',
         backend: 'iris',
-        version: 1
-      }
+        version: 1,
+      },
     });
-    if (abfahrten.data.error) {
-      this.error(abfahrten.data.error);
+    if (abfahrten.error) {
+      this.error(abfahrten.error);
     } else {
-      this.receiveAbfahrten(abfahrten.data.departures);
+      this.receiveAbfahrten(abfahrten.departures);
     }
   }
   error(error) {

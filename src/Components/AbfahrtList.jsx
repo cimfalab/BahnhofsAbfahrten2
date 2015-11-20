@@ -4,25 +4,25 @@ import React from 'react';
 import abfahrtStore from '../Stores/abfahrtStore.js';
 import favStore from '../Stores/favStore.js';
 import titleStore from '../Stores/titleStore.js';
-import {Paper} from 'material-ui';
+import { Paper } from 'material-ui';
 
 
 
 class AbfahrtList extends React.Component {
   static propTypes = {
     params: React.PropTypes.shape({
-      station: React.PropTypes.string
-    })
+      station: React.PropTypes.string,
+    }),
   }
   static style = {
     list: {
       display: 'flex',
       flexDirection: 'column',
-      overflow: 'auto'
-    }
+      overflow: 'auto',
+    },
   }
   state = {
-    abfahrten: []
+    abfahrten: [],
   }
   fav = () => {
     favStore.fav(this.props.params.station);
@@ -37,25 +37,25 @@ class AbfahrtList extends React.Component {
   handleAbfahrten = abfahrten => {
     this.setState({
       abfahrten,
-      error: null
+      error: null,
     });
   }
   handleFav = () => {
     if (favStore.isFaved(this.props.params.station)) {
       favStore.favButton({
         type: 'unfav',
-        fn: this.unfav
+        fn: this.unfav,
       });
     } else {
       favStore.favButton({
         type: 'fav',
-        fn: this.fav
+        fn: this.fav,
       });
     }
   }
   handleError = error => {
     this.setState({
-      error
+      error,
     });
   }
   componentDidMount() {
@@ -75,12 +75,12 @@ class AbfahrtList extends React.Component {
     if (favStore.isFaved(station)) {
       favStore.favButton({
         type: 'unfav',
-        fn: this.unfav
+        fn: this.unfav,
       });
     } else {
       favStore.favButton({
         type: 'fav',
-        fn: this.fav
+        fn: this.fav,
       });
     }
   }

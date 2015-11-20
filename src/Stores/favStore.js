@@ -1,4 +1,4 @@
-import {Map} from 'immutable';
+import { Map } from 'immutable';
 import EventEmitter from 'eventemitter';
 
 const localStorageKey = 'favs';

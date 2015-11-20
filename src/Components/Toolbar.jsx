@@ -3,48 +3,59 @@ import Select from 'react-select';
 import favStore from '../Stores/favStore.js';
 import stationStore from '../Stores/stationStore.js';
 import titleStore from '../Stores/titleStore.js';
-import {AppBar, IconButton} from 'material-ui';
+import { AppBar, IconButton } from 'material-ui';
+import ReactDOM from 'react-dom';
 
 export default class Toolbar extends React.Component {
+  static contextTypes = {
+    history: React.PropTypes.object,
+  }
+  static childContextTypes = {
+    muiTheme: React.PropTypes.object,
+  }
   static style = {
     appBar: {
-      alignItems: 'center'
+      alignItems: 'center',
+      overflow: 'visible',
     },
     icon: {
       color: 'white',
-      fill: 'white'
+      fill: 'white',
     },
     icons: {
       display: 'block',
-      marginTop: -8
-    }
+      marginTop: -8,
+    },
+    selectWrap: {
+      lineHeight: '32px',
+    },
   }
   state = {
-    title: titleStore.defaultTitle
+    title: titleStore.defaultTitle,
   }
   componentDidUpdate() {
-    const dom = React.findDOMNode(this);
-    const inputs = dom.getElementsByTagName('input');
-    if (inputs.length > 1) {
-      inputs[1].focus();
+    const dom = ReactDOM.findDOMNode(this);
+    const inputs = dom.querySelectorAll('input');
+    if (inputs[0]) {
+      inputs[0].focus();
     }
   }
   handleTitle = (title, oldTitle) => {
     this.setState({
       title,
-      oldTitle
+      oldTitle,
     });
   }
   handleFav = (fav) => {
     if (fav) {
       this.setState({
         fav: fav.type,
-        favFn: fav.fn
+        favFn: fav.fn,
       });
     } else {
       this.setState({
         fav: null,
-        favFn: null
+        favFn: null,
       });
     }
   }
@@ -63,10 +74,12 @@ export default class Toolbar extends React.Component {
   }
   openInput = () => {
     titleStore.changeTitle(
-      <Select filterOptions={this.filterOptions} onBlur={this.onBlur} onChange={this.submit}/>
+      <div style={Toolbar.style.selectWrap}>
+        <Select placeholder="Bahnhof..." filterOptions={this.filterOptions} onBlur={this.onBlur} onChange={this.submit}/>
+      </div>
     );
     this.setState({
-      station: ''
+      station: '',
     });
   }
   onBlur = () => {
@@ -79,28 +92,26 @@ export default class Toolbar extends React.Component {
       break;
     }
   }
-  submit(station, selectedOptions) {
+  submit = (station, selectedOptions) => {
     if (selectedOptions.length > 0) {
       station = selectedOptions[0].label;
     }
-    if (!station) {
-      titleStore.resetTitle();
-    } else {
+    if (station) {
       titleStore.changeTitle(station);
+    } else {
+      titleStore.resetTitle();
     }
-    global.router.transitionTo('abfahrten', {
-      station: station.replace('/', '%2F')
-    });
+    this.context.history.pushState(null, `/${station.replace('/', '%F')}`);
   }
   render() {
     const style = Toolbar.style;
-    const {fav, favFn, station} = this.state;
-    const searchIcon = !station ? (
+    const { fav, favFn, station } = this.state;
+    const searchIcon = station ? '' : (
       <IconButton
         iconStyle={style.icon}
         iconClassName="mi mi-search"
         onClick={this.openInput}/>
-    ) : '';
+    );
     let favClass;
     let favBtn;
     if (fav === 'fav') {

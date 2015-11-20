@@ -13,7 +13,7 @@ const titleStyle = {
   margin: 0,
   overflow: 'hidden',
   paddingTop: 0,
-  textOverflow: 'ellipsis'
+  textOverflow: 'ellipsis',
 };
 
 class TitleStore extends EventEmitter {

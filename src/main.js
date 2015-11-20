@@ -1,8 +1,12 @@
 import './vendor.js';
-import {routes} from './config.js';
-import React from 'react';
-import Router from 'react-router';
+import { routes } from './config.js';
+import axios from 'axios';
+import ReactDOM from 'react-dom';
+import taps from 'react-tap-event-plugin';
+taps();
 
-global.router = Router.run(routes, Router.HistoryLocation, Handler => {
-  React.render(<Handler/>, document.body);
-});
+axios.interceptors.response.use(c => c.data);
+
+setTimeout(() => {
+  ReactDOM.render(routes, document.querySelector('#dorfmapWrapper'));
+}, 500);

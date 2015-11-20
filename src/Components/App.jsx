@@ -1,36 +1,28 @@
 import AppCss from './App.CSS';
-import Radium, {Style} from 'radium';
+import Radium, { Style } from 'radium';
 import React from 'react';
 import Toolbar from './Toolbar.jsx';
-import {RouteHandler} from 'react-router';
-import ThemeManager from 'material-ui/lib/styles/theme-manager';
-import LightRawTheme from 'material-ui/lib/styles/raw-themes/light-raw-theme';
 
-const theme = ThemeManager.getMuiTheme(LightRawTheme);
 
 @Radium
 export default class App extends React.Component {
-  static childContextTypes = {
-    muiTheme: React.PropTypes.object.isRequired
-  }
-  getChildContext() {
-    return {
-      muiTheme: theme
-    };
+  static propTypes = {
+    children: React.PropTypes.any,
   }
   static style = {
     wrapper: {
       display: 'flex',
       flexDirection: 'column',
-      height: '100%'
-    }
+      height: '100%',
+    },
   }
   render() {
     const style = App.style;
+    const { children } = this.props;
     return (
       <div style={style.wrapper}>
         <Toolbar/>
-        <RouteHandler/>
+        {children}
         <Style rules={AppCss}/>
       </div>
     );

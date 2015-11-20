@@ -1,10 +1,10 @@
 const stations = _.map(require('../BahnhofCode.json'), station => {
   return {
     label: station.name,
-    value: station.code
+    value: station.code,
   };
 });
-import {filter} from 'fuzzaldrin';
+import { filter } from 'fuzzaldrin';
 
 
 export default class {
@@ -20,7 +20,7 @@ export default class {
   }
   static getFilteredOptions(input) {
     const result = [];
-    _.some(filter(stations, input, {key: 'label'}), (station, index) => {
+    _.some(filter(stations, input, { key: 'label' }), (station, index) => {
       result.push(station);
       return index > 7;
     });
