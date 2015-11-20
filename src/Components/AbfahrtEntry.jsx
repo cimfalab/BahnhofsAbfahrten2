@@ -21,8 +21,11 @@ export default class AbfahrtEntry extends React.Component {
   static style = {
     wrapper: {
       boxShadow: '0 1px 0 rgba(0, 0, 0, 0.24)',
-      overflow: 'hidden',
+      cursor: 'pointer',
       marginBottom: 5,
+      overflow: 'hidden',
+      paddingLeft: 15,
+      paddingRight: 15,
     },
     entry: {
       display: 'flex',
