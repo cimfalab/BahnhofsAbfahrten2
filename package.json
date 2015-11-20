@@ -6,7 +6,8 @@
   "scripts": {
     "dev": "webpack-dev-server --inline --hot -d --content-base www/ --history-api-fallback",
     "build": "webpack --bail",
-    "travis": "NOD_ENV=production npm run build"
+    "prod": "NODE_ENV=production npm run build",
+    "travis": "npm run prod"
   },
   "author": "marudor",
   "license": "MIT",
