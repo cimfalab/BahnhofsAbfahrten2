@@ -92,10 +92,8 @@ export default class Toolbar extends React.Component {
       break;
     }
   }
-  submit = (station, selectedOptions) => {
-    if (selectedOptions.length > 0) {
-      station = selectedOptions[0].label;
-    }
+  submit = (station) => {
+    station = station.label;
     if (station) {
       titleStore.changeTitle(station);
     } else {
