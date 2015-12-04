@@ -19,7 +19,7 @@ class AbfahrtStore extends EventEmitter {
   }
   async requestAbfahrten(station) {
     station = this.indexedStations[station] || station;
-    const abfahrten = await axios.get(`http://dbf.finalrewind.org/${station}`, {
+    const abfahrten = await axios.get(`/api/${station}`, {
       params: {
         mode: 'marudor',
         backend: 'iris',
