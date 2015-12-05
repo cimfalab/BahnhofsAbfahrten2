@@ -46,6 +46,7 @@
     "material-ui": "^0.13.0",
     "radium": "^0.15.1",
     "react": "^0.14.3",
+    "react-dom": "^0.14.3",
     "react-input-autosize": "^0.6.5",
     "react-router": "^1.0.0",
     "react-select": "^1.0.0-beta5",
