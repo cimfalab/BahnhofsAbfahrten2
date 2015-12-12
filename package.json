@@ -40,7 +40,7 @@
     "bootstrap-material-icons": "^0.3.0",
     "eventemitter3": "^1.1.1",
     "fuzzaldrin": "^2.1.0",
-    "history": "^1.13.1",
+    "history": "1.13.x",
     "immutable": "^3.7.2",
     "lodash": "^3.8.0",
     "material-ui": "^0.13.0",
@@ -48,7 +48,7 @@
     "react": "^0.14.3",
     "react-dom": "^0.14.3",
     "react-input-autosize": "^0.6.5",
-    "react-router": "^1.0.0",
+    "react-router": "1.0.2",
     "react-select": "^1.0.0-beta5",
     "react-tap-event-plugin": "^0.2.1"
   }
