@@ -1,11 +1,15 @@
 [ignore]
 .*node_modules/.*
+.*interfaces/public/\.git.*
 
 [include]
 
 [libs]
 interfaces/
+interfaces/public/
 
 [options]
 module.name_mapper= '^eventemitter' -> 'eventemitter3'
 esproposal.decorators=ignore
+esproposal.class_static_fields=enable
+esproposal.class_instance_fields=enable

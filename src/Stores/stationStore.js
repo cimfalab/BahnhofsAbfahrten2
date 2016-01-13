@@ -13,7 +13,7 @@ export default class {
   }
   static getIndexed() {
     const indexedStations = {};
-    _.each(stations, s => {
+    _.forEach(stations, s => {
       indexedStations[s.label] = s.value;
     });
     return indexedStations;
@@ -25,7 +25,7 @@ export default class {
       return index > 7;
     });
     return _.sortBy(result, r => {
-      return !_.contains(r.label.toLowerCase(), 'hbf');
+      return !_.includes(r.label.toLowerCase(), 'hbf');
     });
   }
 }

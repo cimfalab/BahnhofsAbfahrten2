@@ -13,23 +13,23 @@ class AbfahrtList extends React.Component {
     params: React.PropTypes.shape({
       station: React.PropTypes.string,
     }),
-  }
+  };
   static style = {
     list: {
       display: 'flex',
       flexDirection: 'column',
       overflow: 'auto',
     },
-  }
+  };
   state = {
     abfahrten: [],
-  }
+  };
   fav = () => {
     favStore.fav(this.props.params.station);
-  }
+  };
   unfav = () => {
     favStore.unfav(this.props.params.station);
-  }
+  };
   componentWillReceiveProps(newProps) {
     abfahrtStore.clearAbfahrten();
     this.getAbfahrten(newProps.params.station.replace('%2F', '/'));
@@ -39,7 +39,7 @@ class AbfahrtList extends React.Component {
       abfahrten,
       error: null,
     });
-  }
+  };
   handleFav = () => {
     if (favStore.isFaved(this.props.params.station)) {
       favStore.favButton({
@@ -52,12 +52,12 @@ class AbfahrtList extends React.Component {
         fn: this.fav,
       });
     }
-  }
+  };
   handleError = error => {
     this.setState({
       error,
     });
-  }
+  };
   componentDidMount() {
     abfahrtStore.on('abfahrten', this.handleAbfahrten);
     abfahrtStore.on('error', this.handleError);
@@ -85,7 +85,7 @@ class AbfahrtList extends React.Component {
     }
   }
   beautifyError(error) {
-    if (_.contains(error, 'Got no results')) {
+    if (_.includes(error, 'Got no results')) {
       return 'Keine Abfahrten';
     }
   }

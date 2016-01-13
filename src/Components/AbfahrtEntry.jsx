@@ -17,7 +17,7 @@ function normalizeName(name) {
 export default class AbfahrtEntry extends React.Component {
   static propTypes = {
     abfahrt: React.PropTypes.object,
-  }
+  };
   static style = {
     wrapper: {
       boxShadow: '0 1px 0 rgba(0, 0, 0, 0.24)',
@@ -108,17 +108,17 @@ export default class AbfahrtEntry extends React.Component {
     additional: {
       color: 'red',
     },
-  }
+  };
   state = {
     detail: false,
-  }
+  };
   handleDetail = entry => {
     if (entry !== this) {
       this.setState({
         detail: false,
       });
     }
-  }
+  };
   componentWillUnmount() {
     detailStore.off('detail', this.handleDetail);
   }
@@ -126,13 +126,13 @@ export default class AbfahrtEntry extends React.Component {
     const via = [];
     const abfahrten = this.state.detail ? abfahrt.route : abfahrt.via;
     const style = AbfahrtEntry.style;
-    _.each(abfahrten, (v, index) => {
+    _.forEach(abfahrten, (v, index) => {
       if (_.isObject(v) && v.name == null) {
         return;
       }
       const name = v.name || v;
       const lowerName = name.toLowerCase();
-      const isHbf = _.contains(lowerName, 'hbf') || _.contains(lowerName, 'centraal') || _.contains(lowerName, 'centrale') || _.contains(lowerName, 'termini');
+      const isHbf = _.includes(lowerName, 'hbf') || _.includes(lowerName, 'centraal') || _.includes(lowerName, 'centrale') || _.includes(lowerName, 'termini');
       via.push(<span key={`${index}i`} style={[v.isCancelled && style.cancelled, v.isAdditional && style.additional, isHbf && style.hbf]}>{normalizeName(name)}</span>);
       if (index + 1 !== abfahrten.length) {
         via.push(<span key={index}> - </span>);
@@ -145,7 +145,7 @@ export default class AbfahrtEntry extends React.Component {
     if (abfahrt.messages.delay.length > 0) {
       info += abfahrt.messages.delay[0].text;
     }
-    _.each(abfahrt.messages.qos, q => {
+    _.forEach(abfahrt.messages.qos, q => {
       if (info.length > 0) {
         info += ' +++ ';
       }
@@ -177,7 +177,7 @@ export default class AbfahrtEntry extends React.Component {
     this.setState({
       detail: newVal,
     });
-  }
+  };
   render() {
     const { detail } = this.state;
     const abfahrt = this.props.abfahrt;

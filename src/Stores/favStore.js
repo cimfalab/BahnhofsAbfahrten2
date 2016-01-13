@@ -4,12 +4,12 @@ import EventEmitter from 'eventemitter';
 const localStorageKey = 'favs';
 
 class FavStore extends EventEmitter {
-  list = Map()
+  list = Map();
   constructor() {
     super();
     const loadedList = JSON.parse(localStorage.getItem(localStorageKey));
     if (loadedList) {
-      _.each(loadedList, (fav, station) => {
+      _.forEach(loadedList, (fav, station) => {
         this.list = this.list.set(station, fav);
       });
       this.emit('fav', this.list.toJS());

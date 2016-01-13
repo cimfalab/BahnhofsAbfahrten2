@@ -34,14 +34,14 @@ class TitleStore extends EventEmitter {
   }
   openInput = () => {
     this.emit('openInput');
-  }
+  };
   getTitle(title) {
     return (
       <h1 style={titleStyle} onClick={this.openInput}>{title}</h1>
     );
   }
-  defaultTitle = this.getTitle('Bahnhofs Abfahrten')
-  title = this.defaultTitle
+  defaultTitle = this.getTitle('Bahnhofs Abfahrten');
+  title = this.defaultTitle;
 }
 
 export default new TitleStore();

@@ -8,14 +8,14 @@ import Toolbar from './Toolbar.jsx';
 export default class App extends React.Component {
   static propTypes = {
     children: React.PropTypes.any,
-  }
+  };
   static style = {
     wrapper: {
       display: 'flex',
       flexDirection: 'column',
       height: '100%',
     },
-  }
+  };
   render() {
     const style = App.style;
     const { children } = this.props;

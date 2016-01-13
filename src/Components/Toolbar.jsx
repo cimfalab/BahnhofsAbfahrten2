@@ -9,10 +9,10 @@ import ReactDOM from 'react-dom';
 export default class Toolbar extends React.Component {
   static contextTypes = {
     history: React.PropTypes.object,
-  }
+  };
   static childContextTypes = {
     muiTheme: React.PropTypes.object,
-  }
+  };
   static style = {
     appBar: {
       alignItems: 'center',
@@ -29,10 +29,10 @@ export default class Toolbar extends React.Component {
     selectWrap: {
       lineHeight: '32px',
     },
-  }
+  };
   state = {
     title: titleStore.defaultTitle,
-  }
+  };
   componentDidUpdate() {
     const dom = ReactDOM.findDOMNode(this);
     const inputs = dom.querySelectorAll('input');
@@ -45,7 +45,7 @@ export default class Toolbar extends React.Component {
       title,
       oldTitle,
     });
-  }
+  };
   handleFav = (fav) => {
     if (fav) {
       this.setState({
@@ -58,7 +58,7 @@ export default class Toolbar extends React.Component {
         favFn: null,
       });
     }
-  }
+  };
   componentDidMount() {
     titleStore.on('title', this.handleTitle);
     titleStore.on('openInput', this.openInput);
@@ -81,17 +81,17 @@ export default class Toolbar extends React.Component {
     this.setState({
       station: '',
     });
-  }
+  };
   onBlur = () => {
     titleStore.revertTitle();
-  }
+  };
   handleKeyDown = e => {
     switch (e.keyCode) {
       case 27: //Escape
       titleStore.revertTitle();
       break;
     }
-  }
+  };
   submit = (station) => {
     station = station.label;
     if (station) {
@@ -100,7 +100,7 @@ export default class Toolbar extends React.Component {
       titleStore.resetTitle();
     }
     this.context.history.pushState(null, `/${station.replace('/', '%F')}`);
-  }
+  };
   render() {
     const style = Toolbar.style;
     const { fav, favFn, station } = this.state;

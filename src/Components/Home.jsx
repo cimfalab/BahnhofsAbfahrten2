@@ -7,7 +7,7 @@ import { Paper } from 'material-ui';
 export default class extends React.Component {
   state = {
     favs: favStore.getAll(),
-  }
+  };
   constructor() {
     super();
     titleStore.resetTitle();

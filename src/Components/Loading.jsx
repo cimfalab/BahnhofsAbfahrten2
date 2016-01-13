@@ -38,7 +38,7 @@ export default class Loading extends React.Component {
     bounce2: {
       animationDelay: '-1s',
     },
-  }
+  };
   render() {
     const style = Loading.style;
     return (

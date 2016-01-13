@@ -6,8 +6,8 @@ import axios from 'axios';
 import EventEmitter from 'eventemitter';
 
 class AbfahrtStore extends EventEmitter {
-  list = List()
-  indexedStations = stationStore.getIndexed()
+  list = List();
+  indexedStations = stationStore.getIndexed();
   constructor() {
     super();
   }
@@ -37,7 +37,7 @@ class AbfahrtStore extends EventEmitter {
   }
   receiveAbfahrten(abfahrten) {
     this.list = this.list.clear();
-    _.each(abfahrten, abfahrt => {
+    _.forEach(abfahrten, abfahrt => {
       this.list = this.list.push(abfahrt);
     });
     this.emit('abfahrten', this.list.toJS());

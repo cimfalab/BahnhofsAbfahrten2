@@ -6,10 +6,10 @@ import { Paper } from 'material-ui';
 export default class FavEntry extends React.Component {
   static contextTypes = {
     history: React.PropTypes.object,
-  }
+  };
   static propTypes = {
     fav: React.PropTypes.string,
-  }
+  };
   static style = {
     fav: {
       boxShadow: '0 1px 0 rgba(0, 0, 0, 0.24)',
@@ -22,10 +22,10 @@ export default class FavEntry extends React.Component {
         backgroundColor: 'rgb(238, 238, 238)',
       },
     },
-  }
+  };
   transitionTo = () => {
     this.context.history.pushState(null, `/${this.props.fav}`);
-  }
+  };
   render() {
     const station = this.props.fav.replace('%2F', '/');
     const style = FavEntry.style;
