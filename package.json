@@ -12,6 +12,7 @@
   "author": "marudor",
   "license": "MIT",
   "devDependencies": {
+    "babel-core": "^6.4.5",
     "babel-eslint": "^5.0.0-beta6",
     "babel-loader": "^6.2.0",
     "babel-plugin-external-helpers-2": "^6.3.13",
