@@ -3,27 +3,30 @@
 import stationStore from './stationStore.js';
 import { List } from 'immutable';
 import axios from 'axios';
-import EventEmitter from 'eventemitter';
+import EventEmitter from 'eventemitter3';
+
 
 class AbfahrtStore extends EventEmitter {
-  list = List();
+  list: List<Abfahrt> = List();
   indexedStations = stationStore.getIndexed();
-  constructor() {
-    super();
-  }
-  removeAbfahrt(abfahrt) {
-    const [key] = this.list.findEntry(v => v === abfahrt);
+  removeAbfahrt(abfahrt: any) {
+    const [key] = this.list.find(v => v === abfahrt);
     if (key) {
       this.updateList(this.list.remove(key));
     }
   }
-  async requestAbfahrten(station) {
-    station = this.indexedStations[station] || station;
-    const abfahrten = await axios.get(`/api/${station}`, {
+  async requestAbfahrten(station: Station|string) {
+    if (typeof station === 'string') {
+      station = this.indexedStations[station];
+    }
+    const abfahrten: {
+      error?: any,
+      departures: Abfahrt[],
+    } = await axios.get(`/api/${station}`, {
       params: {
         mode: 'marudor',
         backend: 'iris',
-        version: 1,
+        version: 2,
       },
     });
     if (abfahrten.error) {
@@ -32,12 +35,12 @@ class AbfahrtStore extends EventEmitter {
       this.receiveAbfahrten(abfahrten.departures);
     }
   }
-  error(error) {
+  error(error: any) {
     this.emit('error', error);
   }
-  receiveAbfahrten(abfahrten) {
+  receiveAbfahrten(abfahrten: Abfahrt[]) {
     this.list = this.list.clear();
-    _.forEach(abfahrten, abfahrt => {
+    abfahrten.forEach(abfahrt => {
       this.list = this.list.push(abfahrt);
     });
     this.emit('abfahrten', this.list.toJS());
@@ -45,7 +48,7 @@ class AbfahrtStore extends EventEmitter {
   clearAbfahrten() {
     this.updateList(this.list.clear());
   }
-  updateList(list) {
+  updateList(list: List<Abfahrt>) {
     this.list = list;
     this.emit('abfahrten', this.list.toJS());
   }

@@ -1,4 +1,4 @@
-import EventEmitter from 'eventemitter';
+import EventEmitter from 'eventemitter3';
 
 class DetailStore extends EventEmitter {
   setDetail(entry) {

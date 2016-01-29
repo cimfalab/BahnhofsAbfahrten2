@@ -1,13 +1,14 @@
+import _ from 'lodash';
+import { Paper } from 'material-ui';
 import AbfahrtEntry from './AbfahrtEntry.jsx';
-import Loading from './Loading.jsx';
-import React from 'react';
 import abfahrtStore from '../Stores/abfahrtStore.js';
 import favStore from '../Stores/favStore.js';
+import Loading from './Loading.jsx';
+import Radium from 'Radium';
+import React from 'react';
 import titleStore from '../Stores/titleStore.js';
-import { Paper } from 'material-ui';
 
-
-
+@Radium
 class AbfahrtList extends React.Component {
   static propTypes = {
     params: React.PropTypes.shape({
@@ -69,7 +70,7 @@ class AbfahrtList extends React.Component {
     abfahrtStore.off('error', this.handleError);
     favStore.off('fav', this.handleFav);
   }
-  getAbfahrten(station) {
+  getAbfahrten(station: Station) {
     abfahrtStore.requestAbfahrten(station);
     titleStore.changeTitle(titleStore.getTitle(station));
     if (favStore.isFaved(station)) {
@@ -121,7 +122,7 @@ class AbfahrtList extends React.Component {
       <div style={style.list}>
       {
         _.map(this.state.abfahrten, (abfahrt) => {
-          const key = abfahrt.train + abfahrt.time;
+          const key = abfahrt.train + (abfahrt.scheduledDeparture || abfahrt.scheduledArrival);
           return (
             <AbfahrtEntry
             key={key}

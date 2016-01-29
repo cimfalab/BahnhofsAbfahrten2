@@ -1,4 +1,7 @@
-const stations = _.map(require('../BahnhofCode.json'), station => {
+/* @flow */
+import _ from 'lodash';
+
+const stations: Array<Station> = require('../BahnhofCode.json').map(station => {
   return {
     label: station.name,
     value: station.code,
@@ -7,25 +10,25 @@ const stations = _.map(require('../BahnhofCode.json'), station => {
 import { filter } from 'fuzzaldrin';
 
 
-export default class {
-  static getAll() {
+export default {
+  getAll(): Array<Station> {
     return stations;
-  }
-  static getIndexed() {
+  },
+  getIndexed(): {[key: string]: string} {
     const indexedStations = {};
-    _.forEach(stations, s => {
+    stations.forEach(s => {
       indexedStations[s.label] = s.value;
     });
     return indexedStations;
-  }
-  static getFilteredOptions(input) {
+  },
+  getFilteredOptions(input: any): Array<any> {
     const result = [];
-    _.some(filter(stations, input, { key: 'label' }), (station, index) => {
+    filter(stations, input, { key: 'label' }).some((station, index) => {
       result.push(station);
       return index > 7;
     });
     return _.sortBy(result, r => {
       return !_.includes(r.label.toLowerCase(), 'hbf');
     });
-  }
-}
+  },
+};

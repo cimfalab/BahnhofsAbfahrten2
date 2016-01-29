@@ -1,4 +1,4 @@
-import EventEmitter from 'eventemitter';
+import EventEmitter from 'eventemitter3';
 import favStore from './favStore.js';
 import React from 'react';
 

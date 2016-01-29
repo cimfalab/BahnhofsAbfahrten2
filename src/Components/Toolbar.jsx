@@ -5,10 +5,12 @@ import stationStore from '../Stores/stationStore.js';
 import titleStore from '../Stores/titleStore.js';
 import { AppBar, IconButton } from 'material-ui';
 import ReactDOM from 'react-dom';
+import Radium from 'Radium';
 
+@Radium
 export default class Toolbar extends React.Component {
   static contextTypes = {
-    history: React.PropTypes.object,
+    router: React.PropTypes.object,
   };
   static childContextTypes = {
     muiTheme: React.PropTypes.object,
@@ -93,13 +95,16 @@ export default class Toolbar extends React.Component {
     }
   };
   submit = (station) => {
+    if (!station) {
+      return;
+    }
     station = station.label;
     if (station) {
       titleStore.changeTitle(station);
     } else {
       titleStore.resetTitle();
     }
-    this.context.history.pushState(null, `/${station.replace('/', '%F')}`);
+    this.context.router.push(`/${station.replace('/', '%F')}`);
   };
   render() {
     const style = Toolbar.style;
@@ -107,16 +112,16 @@ export default class Toolbar extends React.Component {
     const searchIcon = station ? '' : (
       <IconButton
         iconStyle={style.icon}
-        iconClassName="mi mi-search"
+        iconClassName="mdi mdi-search"
         onClick={this.openInput}/>
     );
     let favClass;
     let favBtn;
     if (fav === 'fav') {
-      favClass = 'mi mi-favorite-border';
+      favClass = 'mdi mdi-favorite-border';
       favBtn = (<IconButton iconStyle={style.icon} iconClassName={favClass} onClick={favFn}/>);
     } else if (fav === 'unfav') {
-      favClass = 'mi mi-favorite';
+      favClass = 'mdi mdi-favorite';
       favBtn = (<IconButton iconStyle={style.icon} iconClassName={favClass} onClick={favFn}/>);
     }
     const icons = (<span style={style.icons}>{searchIcon}{favBtn}</span>);

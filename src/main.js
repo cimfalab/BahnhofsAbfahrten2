@@ -1,3 +1,5 @@
+import 'babel-regenerator-runtime';
+import './babelHelper';
 import './vendor.js';
 import { routes } from './config.js';
 import axios from 'axios';

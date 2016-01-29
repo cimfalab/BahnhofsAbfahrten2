@@ -1,9 +1,10 @@
 /* @flow */
 
-import Radium from 'radium';
+import Radium from 'Radium';
 import React from 'react';
 import detailStore from '../Stores/detailStore.js';
 import { Paper } from 'material-ui';
+import _ from 'lodash';
 
 
 function normalizeName(name) {
@@ -13,7 +14,9 @@ function normalizeName(name) {
   return name;
 }
 
+/*::`*/
 @Radium
+/*::`*/
 export default class AbfahrtEntry extends React.Component {
   static propTypes = {
     abfahrt: React.PropTypes.object,
@@ -64,6 +67,7 @@ export default class AbfahrtEntry extends React.Component {
       flexDirection: 'column',
       justifyContent: 'space-between',
       lineHeight: 1.2,
+      overflow: 'hidden',
       whiteSpace: 'nowrap',
     },
     destination: {
@@ -122,25 +126,45 @@ export default class AbfahrtEntry extends React.Component {
   componentWillUnmount() {
     detailStore.off('detail', this.handleDetail);
   }
-  getVia(abfahrt, isCancelled) {
+  getAbfahrt(name: string, index: number, length: number, abfahrt: Abfahrt, isCancelled?: ?number, isAdditional?: ?number): Array<any> {
     const via = [];
-    const abfahrten = this.state.detail ? abfahrt.route : abfahrt.via;
     const style = AbfahrtEntry.style;
-    _.forEach(abfahrten, (v, index) => {
-      if (_.isObject(v) && v.name == null) {
-        return;
-      }
-      const name = v.name || v;
-      const lowerName = name.toLowerCase();
-      const isHbf = _.includes(lowerName, 'hbf') || _.includes(lowerName, 'centraal') || _.includes(lowerName, 'centrale') || _.includes(lowerName, 'termini');
-      via.push(<span key={`${index}i`} style={[v.isCancelled && style.cancelled, v.isAdditional && style.additional, isHbf && style.hbf]}>{normalizeName(name)}</span>);
-      if (index + 1 !== abfahrten.length) {
-        via.push(<span key={index}> - </span>);
-      }
-    });
-    return via ? <div key="v" style={[style.via, isCancelled && style.cancelled]}>{via}</div> : null;
+    const lowerName = name.toLowerCase();
+    const isHbf = _.includes(lowerName, 'hbf') || _.includes(lowerName, 'centraal') || _.includes(lowerName, 'centrale') || _.includes(lowerName, 'termini');
+    via.push(<span key={`${index}i`} style={[isCancelled && style.cancelled, isAdditional && style.additional, isHbf && style.detail.hbf]}>{normalizeName(name)}</span>);
+    if (index + 1 !== length) {
+      via.push(<span key={index}> - </span>);
+    }
+    return via;
   }
-  getInfo(abfahrt) {
+  getDetailedVia(abfahrt: Abfahrt, isCancelled?: number): Array<any> {
+    let via = [];
+    const abfahrten = abfahrt.route;
+    abfahrten.forEach((v, index) => {
+      via = via.concat(this.getAbfahrt(v.name, index, abfahrten.length, abfahrt, v.isCancelled || isCancelled, v.isAdditional));
+    });
+    return via;
+  }
+  getNormalVia(abfahrt: Abfahrt, isCancelled?: number): Array<any> {
+    let via = [];
+    const abfahrten = abfahrt.via;
+    abfahrten.forEach((v, index) => {
+      via = via.concat(this.getAbfahrt(v, index, abfahrten.length, abfahrt, isCancelled));
+    });
+    return via;
+  }
+  getVia(abfahrt: Abfahrt, isCancelled?: number) {
+    const style = AbfahrtEntry.style;
+    let via = [];
+    if (this.state.detail) {
+      via = this.getDetailedVia(abfahrt, isCancelled);
+    } else {
+    via = this.getNormalVia(abfahrt, isCancelled);
+    }
+    return via.length ? <div key="v" style={[style.via, isCancelled && style.cancelled]}>{via}</div> : null;
+  }
+
+  getInfo(abfahrt: Abfahrt) {
     let info = '';
     if (abfahrt.messages.delay.length > 0) {
       info += abfahrt.messages.delay[0].text;
@@ -157,18 +181,18 @@ export default class AbfahrtEntry extends React.Component {
     const style = AbfahrtEntry.style;
     return info ? <div key="i" style={style.info}>{info}</div> : null;
   }
-  getDelay(abfahrt) {
-    if (!abfahrt.delay || abfahrt.isCancelled) {
+  getDelay(abfahrt: Abfahrt) {
+    if ((!abfahrt.delayDeparture && !abfahrt.delayArrival) || abfahrt.isCancelled) {
       return null;
     }
     const style = AbfahrtEntry.style;
-    let delay = abfahrt.delay;
-    if (abfahrt.delay > 0) {
+    let delay = abfahrt.delayDeparture || abfahrt.delayArrival;
+    if ((abfahrt.delayDeparture || abfahrt.delayArrival) > 0) {
       delay = `+${delay}`;
     } else {
       delay = `-${Math.abs(delay)}`;
     }
-    return (<span style={delay > 0 ? style.delay : style.early}>({delay})</span>);
+    return (<span style={(abfahrt.delayDeparture || abfahrt.delayArrival) > 0 ? style.delay : style.early}>({delay})</span>);
   }
   onClick = () => {
     detailStore.setDetail(this);
@@ -204,7 +228,7 @@ export default class AbfahrtEntry extends React.Component {
             <div style={[style.destination, cancel && style.cancelled]}>{normalizeName(abfahrt.destination)}</div>
           </div>
           <div style={[style.end, cancel && style.cancelled]}>
-            <div style={style.time}>{abfahrt.time}</div>
+            <div style={style.time}>{abfahrt.scheduledDeparture || abfahrt.scheduledArrival}</div>
             <div>
               {delay}
               <span style={style.platform}>{abfahrt.platform}</span>

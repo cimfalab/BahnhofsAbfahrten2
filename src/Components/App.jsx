@@ -1,5 +1,5 @@
 import AppCss from './App.CSS';
-import Radium, { Style } from 'radium';
+import Radium, { Style, StyleRoot } from 'Radium';
 import React from 'react';
 import Toolbar from './Toolbar.jsx';
 
@@ -20,11 +20,11 @@ export default class App extends React.Component {
     const style = App.style;
     const { children } = this.props;
     return (
-      <div style={style.wrapper}>
+      <StyleRoot style={style.wrapper}>
         <Toolbar/>
         {children}
         <Style rules={AppCss}/>
-      </div>
+      </StyleRoot>
     );
   }
 }

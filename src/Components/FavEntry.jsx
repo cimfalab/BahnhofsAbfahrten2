@@ -1,11 +1,11 @@
-import Radium from 'radium';
+import Radium from 'Radium';
 import React from 'react';
 import { Paper } from 'material-ui';
 
 @Radium
 export default class FavEntry extends React.Component {
   static contextTypes = {
-    history: React.PropTypes.object,
+    router: React.PropTypes.object,
   };
   static propTypes = {
     fav: React.PropTypes.string,
@@ -24,7 +24,7 @@ export default class FavEntry extends React.Component {
     },
   };
   transitionTo = () => {
-    this.context.history.pushState(null, `/${this.props.fav}`);
+    this.context.router.push(`/${this.props.fav}`);
   };
   render() {
     const station = this.props.fav.replace('%2F', '/');

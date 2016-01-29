@@ -9,9 +9,6 @@
     "jsx": true,
     "modules": true
   },
-  "globals": {
-    "_": false,
-  },
   "rules": {
     "accessor-pairs": 0,
     "array-bracket-spacing": [2, "never"],
@@ -219,9 +216,12 @@
     "react/require-extension": 2,
     "react/self-closing-comp": 2,
     "react/sort-comp": 0,
-    "react/wrap-multilines": 2
+    "react/wrap-multilines": 2,
+    "flow-vars/define-flow-type": 1,
+    "flow-vars/use-flow-type": 1,
   },
   "plugins": [
-    "react"
+    "react",
+    "flow-vars"
   ]
 }

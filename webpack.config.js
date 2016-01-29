@@ -48,7 +48,7 @@ module.exports = {
     './src/main.js'
   ],
   output: {
-    path: path.resolve('public'),
+    path: path.resolve('www'),
     filename: 'app-[hash].js',
     publicPath: ''
   },
@@ -67,4 +67,14 @@ module.exports = {
     ]
   },
   plugins,
+  devServer: {
+    proxy: {
+      '/api/*': {
+        changeOrigin: true,
+        toProxy: true,
+        xfwd: true,
+        target: 'https://marudor.de/',
+      },
+    },
+  },
 };

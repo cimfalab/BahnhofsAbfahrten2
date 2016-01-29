@@ -3,7 +3,10 @@ import React from 'react';
 import favStore from '../Stores/favStore.js';
 import titleStore from '../Stores/titleStore.js';
 import { Paper } from 'material-ui';
+import _ from 'lodash';
+import Radium from 'Radium';
 
+@Radium
 export default class extends React.Component {
   state = {
     favs: favStore.getAll(),
