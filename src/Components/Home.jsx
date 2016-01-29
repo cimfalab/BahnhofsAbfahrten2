@@ -4,7 +4,7 @@ import favStore from '../Stores/favStore.js';
 import titleStore from '../Stores/titleStore.js';
 import { Paper } from 'material-ui';
 import _ from 'lodash';
-import Radium from 'Radium';
+import Radium from 'radium';
 
 @Radium
 export default class extends React.Component {

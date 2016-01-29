@@ -1,6 +1,6 @@
 /* @flow */
 
-import Radium from 'Radium';
+import Radium from 'radium';
 import React from 'react';
 import detailStore from '../Stores/detailStore.js';
 import { Paper } from 'material-ui';

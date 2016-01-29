@@ -1,5 +1,5 @@
 import AppCss from './App.CSS';
-import Radium, { Style, StyleRoot } from 'Radium';
+import Radium, { Style, StyleRoot } from 'radium';
 import React from 'react';
 import Toolbar from './Toolbar.jsx';
 

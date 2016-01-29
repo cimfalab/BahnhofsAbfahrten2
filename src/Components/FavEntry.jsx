@@ -1,4 +1,4 @@
-import Radium from 'Radium';
+import Radium from 'radium';
 import React from 'react';
 import { Paper } from 'material-ui';
 

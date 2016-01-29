@@ -5,7 +5,7 @@ import stationStore from '../Stores/stationStore.js';
 import titleStore from '../Stores/titleStore.js';
 import { AppBar, IconButton } from 'material-ui';
 import ReactDOM from 'react-dom';
-import Radium from 'Radium';
+import Radium from 'radium';
 
 @Radium
 export default class Toolbar extends React.Component {

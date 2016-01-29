@@ -4,7 +4,7 @@ import AbfahrtEntry from './AbfahrtEntry.jsx';
 import abfahrtStore from '../Stores/abfahrtStore.js';
 import favStore from '../Stores/favStore.js';
 import Loading from './Loading.jsx';
-import Radium from 'Radium';
+import Radium from 'radium';
 import React from 'react';
 import titleStore from '../Stores/titleStore.js';
 
