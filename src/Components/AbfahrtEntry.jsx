@@ -8,16 +8,24 @@ import _ from 'lodash';
 
 
 function normalizeName(name) {
-  name = name.replace(/([^ ])\(/, '$1 (');
-  name = name.replace(/\)(.)/, ') $1');
-  name = name.replace(/Frankfurt \(M\)/, 'Frankfurt (Main)');
-  return name;
+  let normalizedName = name.replace(/([^ ])\(/, '$1 (');
+  normalizedName = name.replace(/\)(.)/, ') $1');
+  normalizedName = name.replace(/Frankfurt \(M\)/, 'Frankfurt (Main)');
+  return normalizedName;
+}
+
+type Props = {
+  abfahrt: Abfahrt,
+}
+
+type State = {
+  detail: bool,
 }
 
 /*::`*/
 @Radium
 /*::`*/
-export default class AbfahrtEntry extends React.Component {
+export default class AbfahrtEntry extends React.Component<void, Props, State> {
   static propTypes = {
     abfahrt: React.PropTypes.object,
   };
@@ -113,7 +121,7 @@ export default class AbfahrtEntry extends React.Component {
       color: 'red',
     },
   };
-  state = {
+  state: State = {
     detail: false,
   };
   handleDetail = entry => {

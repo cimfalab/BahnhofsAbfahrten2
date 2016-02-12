@@ -9,6 +9,7 @@
     "prod": "NODE_ENV=production npm run build",
     "travis": "npm run prod"
   },
+  "repository": "https://github.com/marudor/bahnhofsabfahrten2",
   "author": "marudor",
   "license": "MIT",
   "devDependencies": {
@@ -46,21 +47,28 @@
   },
   "dependencies": {
     "axios": "0.9.1",
-    "babel-regenerator-runtime": "^6.3.13",
-    "bluebird": "^3.0.5",
+    "babel-core": "^6.5.1",
+    "babel-eslint": "^5.0.0-beta9",
+    "babel-loader": "^6.2.2",
+    "babel-polyfill": "^6.5.0",
+    "bluebird": "^3.3.0",
     "bootstrap-material-icons": "1.1.0",
     "eventemitter3": "1.1.1",
     "fuzzaldrin": "2.1.0",
-    "history": "1.17.0",
+    "history": "^2.0.0",
     "immutable": "3.7.6",
-    "lodash": "4.0.1",
-    "material-ui": "0.14.3",
-    "radium": "0.16.5",
+    "lodash": "^4.3.0",
+    "material-ui": "^0.14.4",
+    "radium": "^0.16.6",
     "react": "0.14.7",
     "react-dom": "0.14.7",
     "react-input-autosize": "^0.6.5",
-    "react-router": "2.0.0-rc5",
+    "react-router": "^2.0.0",
     "react-select": "^1.0.0-beta5",
-    "react-tap-event-plugin": "^0.2.1"
+    "react-tap-event-plugin": "^0.2.1",
+    "react-transform-catch-errors": "^1.0.2",
+    "react-transform-hmr": "^1.0.2",
+    "redbox-react": "^1.2.2",
+    "webpack": "^1.12.13"
   }
 }

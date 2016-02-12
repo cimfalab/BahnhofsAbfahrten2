@@ -15,14 +15,12 @@ class AbfahrtStore extends EventEmitter {
       this.updateList(this.list.remove(key));
     }
   }
-  async requestAbfahrten(station: Station|string) {
-    if (typeof station === 'string') {
-      station = this.indexedStations[station];
-    }
+  async requestAbfahrten(station: string) {
+    const stationObject = this.indexedStations[station];
     const abfahrten: {
       error?: any,
       departures: Abfahrt[],
-    } = await axios.get(`/api/${station}`, {
+    } = await axios.get(`/api/${stationObject}`, {
       params: {
         mode: 'marudor',
         backend: 'iris',

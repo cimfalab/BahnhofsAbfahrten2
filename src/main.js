@@ -1,4 +1,4 @@
-import 'babel-regenerator-runtime';
+import 'babel-polyfill';
 import './babelHelper';
 import './vendor.js';
 import { routes } from './config.js';
