@@ -89,6 +89,7 @@ class AbfahrtList extends React.Component {
     if (_.includes(error, 'Got no results')) {
       return 'Keine Abfahrten';
     }
+    return undefined;
   }
   render() {
     if (this.state.error) {

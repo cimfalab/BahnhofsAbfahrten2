@@ -36,8 +36,9 @@ module.exports = {
   devtool: node_env === 'production' ? undefined : 'cheap-module-source-map',
   eslint: {
     configFile: './src/.eslintrc',
-    failOnWarning: true,
-    failOnError: true
+    failOnWarning: false,
+    failOnError: true,
+    noIgnore: true,
   },
   context: __dirname,
   resolve: {

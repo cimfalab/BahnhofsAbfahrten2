@@ -167,7 +167,7 @@ export default class AbfahrtEntry extends React.Component<void, Props, State> {
     if (this.state.detail) {
       via = this.getDetailedVia(abfahrt, isCancelled);
     } else {
-    via = this.getNormalVia(abfahrt, isCancelled);
+      via = this.getNormalVia(abfahrt, isCancelled);
     }
     return via.length ? <div key="v" style={[style.via, isCancelled && style.cancelled]}>{via}</div> : null;
   }

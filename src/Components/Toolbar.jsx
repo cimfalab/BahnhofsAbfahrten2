@@ -92,19 +92,21 @@ export default class Toolbar extends React.Component {
       case 27: //Escape
       titleStore.revertTitle();
       break;
+      default:
+      break;
     }
   };
   submit = (station) => {
     if (!station) {
       return;
     }
-    station = station.label;
+    const stationLabel = station.label;
     if (station) {
-      titleStore.changeTitle(station);
+      titleStore.changeTitle(stationLabel);
     } else {
       titleStore.resetTitle();
     }
-    this.context.router.push(`/${station.replace('/', '%F')}`);
+    this.context.router.push(`/${stationLabel.replace('/', '%F')}`);
   };
   render() {
     const style = Toolbar.style;

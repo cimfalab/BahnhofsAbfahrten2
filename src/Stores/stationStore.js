@@ -1,12 +1,10 @@
 /* @flow */
 import _ from 'lodash';
 
-const stations: Array<Station> = require('../BahnhofCode.json').map(station => {
-  return {
-    label: station.name,
-    value: station.code,
-  };
-});
+const stations: Array<Station> = require('../BahnhofCode.json').map(station => ({
+  label: station.name,
+  value: station.code,
+}));
 import { filter } from 'fuzzaldrin';
 
 
@@ -27,8 +25,6 @@ export default {
       result.push(station);
       return index > 7;
     });
-    return _.sortBy(result, r => {
-      return !_.includes(r.label.toLowerCase(), 'hbf');
-    });
+    return _.sortBy(result, r => !_.includes(r.label.toLowerCase(), 'hbf'));
   },
 };

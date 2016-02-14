@@ -25,7 +25,7 @@ export default class Loading extends React.Component {
       width: 80,
     },
     bounce: {
-      animation: `2s infinite ease-in-out`,
+      animation: '2s infinite ease-in-out',
       animationName: bounce,
       backgroundColor: '#333',
       borderRadius: '50%',

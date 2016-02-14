@@ -31,11 +31,7 @@ export default class extends React.Component {
     }
     return (
       <div>
-        {_.map(this.state.favs, (x, fav) => {
-          return (
-            <FavEntry fav={fav} key={fav}/>
-          );
-        })}
+        {_.map(this.state.favs, (x, fav) => <FavEntry fav={fav} key={fav}/>)}
       </div>
     );
   }
