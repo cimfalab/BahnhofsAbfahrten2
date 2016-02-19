@@ -9,7 +9,7 @@ var node_env = process.env.NODE_ENV || 'development';
 var plugins = [
   new webpack.NoErrorsPlugin(),
   new HtmlWebpackPlugin({
-    template: './src/index.html',
+    template: 'html!./src/index.html',
     title: 'Bahnhofs Abfahrten',
     minify: {}
   }),
