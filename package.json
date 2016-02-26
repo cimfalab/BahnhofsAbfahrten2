@@ -7,7 +7,7 @@
     "dev": "webpack-dev-server --progress --inline --hot -d --content-base www/ --history-api-fallback",
     "build": "webpack --bail",
     "prod": "NODE_ENV=production npm run build",
-    "travis": "npm run prod"
+    "test": "npm run prod"
   },
   "repository": "https://github.com/marudor/bahnhofsabfahrten2",
   "author": "marudor",
