@@ -1,10 +1,11 @@
 /* @flow */
 
+import _ from 'lodash';
+import { autobind } from 'core-decorators';
+import { Paper } from 'material-ui';
+import detailStore from '../Stores/detailStore.js';
 import Radium from 'radium';
 import React from 'react';
-import detailStore from '../Stores/detailStore.js';
-import { Paper } from 'material-ui';
-import _ from 'lodash';
 
 
 function normalizeName(name) {
@@ -25,10 +26,8 @@ type State = {
 /*::`*/
 @Radium
 /*::`*/
-export default class AbfahrtEntry extends React.Component<void, Props, State> {
-  static propTypes = {
-    abfahrt: React.PropTypes.object,
-  };
+export default class AbfahrtEntry extends React.Component {
+  props: Props;
   static style = {
     wrapper: {
       boxShadow: '0 1px 0 rgba(0, 0, 0, 0.24)',
@@ -124,13 +123,14 @@ export default class AbfahrtEntry extends React.Component<void, Props, State> {
   state: State = {
     detail: false,
   };
-  handleDetail = entry => {
+  @autobind
+  handleDetail(entry: AbfahrtEntry) {
     if (entry !== this) {
       this.setState({
         detail: false,
       });
     }
-  };
+  }
   componentWillUnmount() {
     detailStore.off('detail', this.handleDetail);
   }
@@ -202,14 +202,15 @@ export default class AbfahrtEntry extends React.Component<void, Props, State> {
     }
     return (<span style={(abfahrt.delayDeparture || abfahrt.delayArrival) > 0 ? style.delay : style.early}>({delay})</span>);
   }
-  onClick = () => {
+  @autobind
+  onClick() {
     detailStore.setDetail(this);
     detailStore.on('detail', this.handleDetail);
     const newVal = !this.state.detail;
     this.setState({
       detail: newVal,
     });
-  };
+  }
   render() {
     const { detail } = this.state;
     const abfahrt = this.props.abfahrt;

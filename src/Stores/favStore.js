@@ -6,14 +6,14 @@ import _ from 'lodash';
 const localStorageKey = 'favs';
 
 class FavStore extends EventEmitter {
-  list: Map<string, string> = Map();
+  list: Map<string, bool> = Map();
   constructor() {
     super();
     const rawList = localStorage.getItem(localStorageKey);
     if (rawList) {
       const loadedList = JSON.parse(rawList);
       if (loadedList) {
-        _.each(loadedList, (fav: string, station: string) => {
+        _.each(loadedList, (fav: bool, station: string) => {
           this.list = this.list.set(station, fav);
         });
         this.emit('fav', this.list.toJS());
@@ -35,7 +35,7 @@ class FavStore extends EventEmitter {
   getAll(): Array<string> {
     return this.list.toJS();
   }
-  updateList(list: Map<string, string>) {
+  updateList(list: Map<string, bool>) {
     this.list = list;
     localStorage.setItem(localStorageKey, JSON.stringify(list.toJS()));
     this.emit('fav', list.toJS());

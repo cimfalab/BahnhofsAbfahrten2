@@ -42,6 +42,7 @@ module.exports = {
   },
   context: __dirname,
   resolve: {
+    extensions: ['', '.jsx', '.js', '.json'],
     alias,
     root: path.resolve('src')
   },

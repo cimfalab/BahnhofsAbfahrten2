@@ -1,7 +1,8 @@
 /* @flow */
 import _ from 'lodash';
+import rawStations from '../BahnhofCode';
 
-const stations: Array<Station> = require('../BahnhofCode.json').map(station => ({
+const stations: Array<Station> = rawStations.map(station => ({
   label: station.name,
   value: station.code,
 }));
