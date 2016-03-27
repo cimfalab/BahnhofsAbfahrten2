@@ -7,6 +7,7 @@ import spendenText from '../spenden';
 
 const style = {
   wrap: {
+    padding: 5,
     flex: '1 1 0',
     display: 'flex',
     flexDirection: 'column',
