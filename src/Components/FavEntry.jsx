@@ -1,14 +1,20 @@
+// @flow
+import { autobind } from 'core-decorators';
+import { Paper } from 'material-ui';
 import Radium from 'radium';
 import React from 'react';
-import { Paper } from 'material-ui';
 
+type Props = {
+  fav: string,
+}
+
+/*::`*/
 @Radium
+/*::`*/
 export default class FavEntry extends React.Component {
+  props: Props;
   static contextTypes = {
     router: React.PropTypes.object,
-  };
-  static propTypes = {
-    fav: React.PropTypes.string,
   };
   static style = {
     fav: {
@@ -23,9 +29,10 @@ export default class FavEntry extends React.Component {
       },
     },
   };
-  transitionTo = () => {
+  @autobind
+  transitionTo() {
     this.context.router.push(`/${this.props.fav}`);
-  };
+  }
   render() {
     const station = this.props.fav.replace('%2F', '/');
     const style = FavEntry.style;

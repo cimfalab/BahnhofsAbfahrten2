@@ -1,3 +1,4 @@
+// @flow
 import _ from 'lodash';
 import { Paper } from 'material-ui';
 import AbfahrtEntry from './AbfahrtEntry.jsx';
@@ -7,14 +8,24 @@ import Loading from './Loading.jsx';
 import Radium from 'radium';
 import React from 'react';
 import titleStore from '../Stores/titleStore.js';
+import { autobind } from 'core-decorators';
 
+type State = {
+  abfahrten: Abfahrt[],
+  error?: ?string,
+}
+
+type Props = {
+  params: {
+    station: string,
+  },
+}
+
+/*::`*/
 @Radium
+/*::`*/
 class AbfahrtList extends React.Component {
-  static propTypes = {
-    params: React.PropTypes.shape({
-      station: React.PropTypes.string,
-    }),
-  };
+  props: Props;
   static style = {
     list: {
       display: 'flex',
@@ -22,26 +33,30 @@ class AbfahrtList extends React.Component {
       overflow: 'auto',
     },
   };
-  state = {
+  state: State = {
     abfahrten: [],
   };
-  fav = () => {
+  @autobind
+  fav() {
     favStore.fav(this.props.params.station);
-  };
-  unfav = () => {
+  }
+  @autobind
+  unfav() {
     favStore.unfav(this.props.params.station);
-  };
-  componentWillReceiveProps(newProps) {
+  }
+  componentWillReceiveProps(newProps: Props) {
     abfahrtStore.clearAbfahrten();
     this.getAbfahrten(newProps.params.station.replace('%2F', '/'));
   }
-  handleAbfahrten = abfahrten => {
+  @autobind
+  handleAbfahrten(abfahrten: Abfahrt[]) {
     this.setState({
       abfahrten,
       error: null,
     });
-  };
-  handleFav = () => {
+  }
+  @autobind
+  handleFav() {
     if (favStore.isFaved(this.props.params.station)) {
       favStore.favButton({
         type: 'unfav',
@@ -53,12 +68,13 @@ class AbfahrtList extends React.Component {
         fn: this.fav,
       });
     }
-  };
-  handleError = error => {
+  }
+  @autobind
+  handleError(error: any) {
     this.setState({
       error,
     });
-  };
+  }
   componentDidMount() {
     abfahrtStore.on('abfahrten', this.handleAbfahrten);
     abfahrtStore.on('error', this.handleError);
@@ -70,7 +86,7 @@ class AbfahrtList extends React.Component {
     abfahrtStore.off('error', this.handleError);
     favStore.off('fav', this.handleFav);
   }
-  getAbfahrten(station: Station) {
+  getAbfahrten(station: string) {
     abfahrtStore.requestAbfahrten(station);
     titleStore.changeTitle(titleStore.getTitle(station));
     if (favStore.isFaved(station)) {
@@ -85,7 +101,7 @@ class AbfahrtList extends React.Component {
       });
     }
   }
-  beautifyError(error) {
+  beautifyError(error: string) {
     if (_.includes(error, 'Got no results')) {
       return 'Keine Abfahrten';
     }

@@ -1,3 +1,4 @@
+// @flow
 import React from 'react';
 import Radium from 'radium';
 
@@ -13,7 +14,9 @@ const bounce = Radium.keyframes({
   },
 });
 
+/*::`*/
 @Radium
+/*::`*/
 export default class Loading extends React.Component {
   static style = {
     spinner: {

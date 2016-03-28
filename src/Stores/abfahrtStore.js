@@ -20,7 +20,7 @@ class AbfahrtStore extends EventEmitter {
     const abfahrten: {
       error?: any,
       departures: Abfahrt[],
-    } = await axios.get(`/api/${stationObject}`, {
+    } = await axios.get(`/api/${stationObject.value}`, {
       params: {
         mode: 'marudor',
         backend: 'iris',

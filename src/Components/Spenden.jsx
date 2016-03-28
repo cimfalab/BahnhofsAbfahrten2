@@ -7,13 +7,15 @@ import spendenText from '../spenden';
 
 const style = {
   wrap: {
-    padding: 5,
     flex: '1 1 0',
     display: 'flex',
     flexDirection: 'column',
   },
   spacer: {
     flex: '1 1 0',
+  },
+  text: {
+    padding: 10,
   },
 };
 
@@ -25,7 +27,7 @@ export default class Spenden extends React.Component {
     return (
       <div style={style.wrap}>
         <div style={style.spacer}/>
-        <Paper>
+        <Paper style={style.text}>
           Du findest die Website Praktisch? Du nutzt sie häufig?
           <br/>
           Ich würde mich über eine Spende freuen!

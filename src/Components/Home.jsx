@@ -1,15 +1,16 @@
 /* @flow */
-import FavEntry from './FavEntry.jsx';
-import React from 'react';
-import favStore from '../Stores/favStore.js';
-import titleStore from '../Stores/titleStore.js';
-import { Paper } from 'material-ui';
 import _ from 'lodash';
+import { Paper } from 'material-ui';
+import FavEntry from './FavEntry.jsx';
+import favStore from '../Stores/favStore.js';
 import Radium from 'radium';
+import React from 'react';
 import Spenden from './Spenden';
+import titleStore from '../Stores/titleStore.js';
+import type { Map } from 'immutable';
 
 type State = {
-  favs: string[],
+  favs: Map<string, bool>,
 }
 
 const style = {

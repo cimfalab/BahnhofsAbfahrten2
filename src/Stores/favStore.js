@@ -20,20 +20,20 @@ class FavStore extends EventEmitter {
       }
     }
   }
-  fav(station: Station) {
-    this.updateList(this.list.set(station.value, true));
+  fav(station: string) {
+    this.updateList(this.list.set(station, true));
   }
-  unfav(station: Station) {
-    this.updateList(this.list.remove(station.value));
+  unfav(station: string) {
+    this.updateList(this.list.remove(station));
   }
   favButton(button: any) {
     this.emit('favButton', button);
   }
-  isFaved(station: Station): bool {
-    return this.list.has(station.value);
+  isFaved(station: string): bool {
+    return this.list.has(station);
   }
-  getAll(): Array<string> {
-    return this.list.toJS();
+  getAll(): Map<string, bool> {
+    return this.list;
   }
   updateList(list: Map<string, bool>) {
     this.list = list;

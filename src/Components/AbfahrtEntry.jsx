@@ -1,5 +1,4 @@
 /* @flow */
-
 import _ from 'lodash';
 import { autobind } from 'core-decorators';
 import { Paper } from 'material-ui';

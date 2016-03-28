@@ -1,13 +1,25 @@
-import React from 'react';
-import Select from 'react-select';
+// @flow
+import { AppBar, IconButton } from 'material-ui';
+import { autobind } from 'core-decorators';
 import favStore from '../Stores/favStore.js';
+import Radium from 'radium';
+import React from 'react';
+import ReactDOM from 'react-dom';
+import Select from 'react-select';
 import stationStore from '../Stores/stationStore.js';
 import titleStore from '../Stores/titleStore.js';
-import { AppBar, IconButton } from 'material-ui';
-import ReactDOM from 'react-dom';
-import Radium from 'radium';
 
+type State = {
+  title: string,
+  oldTitle?: string,
+  station?: string,
+  fav?: string,
+  favFn?: Function,
+}
+
+/*::`*/
 @Radium
+/*::`*/
 export default class Toolbar extends React.Component {
   static contextTypes = {
     router: React.PropTypes.object,
@@ -32,7 +44,7 @@ export default class Toolbar extends React.Component {
       lineHeight: '32px',
     },
   };
-  state = {
+  state: State = {
     title: titleStore.defaultTitle,
   };
   componentDidUpdate() {
@@ -42,13 +54,15 @@ export default class Toolbar extends React.Component {
       inputs[0].focus();
     }
   }
-  handleTitle = (title, oldTitle) => {
+  @autobind
+  handleTitle(title: string, oldTitle: string) {
     this.setState({
       title,
       oldTitle,
     });
-  };
-  handleFav = (fav) => {
+  }
+  @autobind
+  handleFav(fav?: { type: string, fn: Function }) {
     if (fav) {
       this.setState({
         fav: fav.type,
@@ -56,11 +70,11 @@ export default class Toolbar extends React.Component {
       });
     } else {
       this.setState({
-        fav: null,
-        favFn: null,
+        fav: undefined,
+        favFn: undefined,
       });
     }
-  };
+  }
   componentDidMount() {
     titleStore.on('title', this.handleTitle);
     titleStore.on('openInput', this.openInput);
@@ -71,10 +85,11 @@ export default class Toolbar extends React.Component {
     titleStore.off('openInput', this.openInput);
     favStore.off('favButton', this.handleFav);
   }
-  filterOptions(stations, input) {
+  filterOptions(stations: any, input: string): Station[] {
     return stationStore.getFilteredOptions(input);
   }
-  openInput = () => {
+  @autobind
+  openInput() {
     titleStore.changeTitle(
       <div style={Toolbar.style.selectWrap}>
         <Select placeholder="Bahnhof..." filterOptions={this.filterOptions} onBlur={this.onBlur} onChange={this.submit}/>
@@ -83,11 +98,11 @@ export default class Toolbar extends React.Component {
     this.setState({
       station: '',
     });
-  };
-  onBlur = () => {
+  }
+  onBlur() {
     titleStore.revertTitle();
-  };
-  handleKeyDown = e => {
+  }
+  handleKeyDown(e: SyntheticKeyboardEvent) {
     switch (e.keyCode) {
       case 27: //Escape
       titleStore.revertTitle();
@@ -95,8 +110,9 @@ export default class Toolbar extends React.Component {
       default:
       break;
     }
-  };
-  submit = (station) => {
+  }
+  @autobind
+  submit(station: Station) {
     if (!station) {
       return;
     }
@@ -107,7 +123,7 @@ export default class Toolbar extends React.Component {
       titleStore.resetTitle();
     }
     this.context.router.push(`/${stationLabel.replace('/', '%F')}`);
-  };
+  }
   render() {
     const style = Toolbar.style;
     const { fav, favFn, station } = this.state;

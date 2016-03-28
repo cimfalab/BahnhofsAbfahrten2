@@ -72,9 +72,9 @@ module.exports = {
   devServer: {
     proxy: {
       '/api/*': {
-        changeOrigin: true,
         toProxy: true,
         xfwd: true,
+        changeOrigin: true,
         target: 'https://marudor.de/',
       },
     },

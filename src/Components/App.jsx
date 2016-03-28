@@ -1,14 +1,18 @@
+// @flow
 import AppCss from './App.CSS';
 import Radium, { Style, StyleRoot } from 'radium';
 import React from 'react';
 import Toolbar from './Toolbar.jsx';
 
+type Props = {
+  children?: any,
+}
 
+/*::`*/
 @Radium
+/*::`*/
 export default class App extends React.Component {
-  static propTypes = {
-    children: React.PropTypes.any,
-  };
+  props: Props;
   static style = {
     wrapper: {
       display: 'flex',
