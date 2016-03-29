@@ -7,6 +7,17 @@
     "transform-es2015-modules-commonjs"
   ],
   "env": {
+    "hot": {
+      "plugins": [
+        ["react-transform", {
+          "transforms": [{
+            "transform": "react-transform-hmr",
+            "imports": ["react"],
+            "locals": ["module"]
+          }]
+        }]
+      ]
+    },
     "production": {
       "plugins": [
         "transform-remove-console",

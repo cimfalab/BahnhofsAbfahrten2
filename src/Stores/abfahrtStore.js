@@ -16,21 +16,25 @@ class AbfahrtStore extends EventEmitter {
     }
   }
   async requestAbfahrten(station: string) {
-    const stationObject = this.indexedStations[station];
-    const abfahrten: {
-      error?: any,
-      departures: Abfahrt[],
-    } = await axios.get(`/api/${stationObject.value}`, {
-      params: {
-        mode: 'marudor',
-        backend: 'iris',
-        version: 2,
-      },
-    });
-    if (abfahrten.error) {
-      this.error(abfahrten.error);
-    } else {
-      this.receiveAbfahrten(abfahrten.departures);
+    try {
+      const stationObject = this.indexedStations[station];
+      const abfahrten: {
+        error?: any,
+        departures: Abfahrt[],
+      } = await axios.get(`/api/${stationObject.value}`, {
+        params: {
+          mode: 'marudor',
+          backend: 'iris',
+          version: 2,
+        },
+      });
+      if (abfahrten.error) {
+        this.error(abfahrten.error);
+      } else {
+        this.receiveAbfahrten(abfahrten.departures);
+      }
+    } catch (e) {
+      this.error('Netzwerk fehler - Versuchs doch nochmal');
     }
   }
   error(error: any) {

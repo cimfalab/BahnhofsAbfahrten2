@@ -1,5 +1,4 @@
 /* @flow */
-import _ from 'lodash';
 import { Paper } from 'material-ui';
 import FavEntry from './FavEntry.jsx';
 import favStore from '../Stores/favStore.js';
@@ -33,21 +32,21 @@ export default class extends React.Component {
     titleStore.resetTitle();
   }
   render() {
-    if (_.isEmpty(this.state.favs)) {
+    if (this.state.favs.size <= 0) {
       return (
         <div style={style.wrap}>
           <Paper>
-            Leider keine Favs :(
-            </Paper>
-            <Spenden/>
-          </div>
-        );
-      }
-      return (
-        <div style={style.wrap}>
-          {_.map(this.state.favs, (x, fav) => <FavEntry fav={fav} key={fav}/>)}
+            Bisher hast du keine Favoriten.
+          </Paper>
           <Spenden/>
         </div>
       );
     }
+    return (
+      <div style={style.wrap}>
+        {this.state.favs.map((x, fav) => <FavEntry fav={fav} key={fav}/>)}
+        <Spenden/>
+      </div>
+    );
   }
+}

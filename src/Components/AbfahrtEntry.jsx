@@ -31,6 +31,7 @@ export default class AbfahrtEntry extends React.Component {
     wrapper: {
       boxShadow: '0 1px 0 rgba(0, 0, 0, 0.24)',
       cursor: 'pointer',
+      flexShrink: 0,
       marginBottom: 5,
       overflow: 'hidden',
       paddingLeft: 15,

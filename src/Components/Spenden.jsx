@@ -16,6 +16,8 @@ const style = {
   },
   text: {
     padding: 10,
+    display: 'flex',
+    justifyContent: 'space-between',
   },
 };
 
@@ -28,11 +30,16 @@ export default class Spenden extends React.Component {
       <div style={style.wrap}>
         <div style={style.spacer}/>
         <Paper style={style.text}>
-          Du findest die Website Praktisch? Du nutzt sie häufig?
-          <br/>
-          Ich würde mich über eine Spende freuen!
-          <br/>
-          <span dangerouslySetInnerHTML={{ __html: spendenText }}></span>
+          <div>
+            Du findest die Website Praktisch? Du nutzt sie häufig?
+            <br/>
+            Ich würde mich über eine Spende freuen!
+            <br/>
+            <span dangerouslySetInnerHTML={{ __html: spendenText }}></span>
+          </div>
+          <div>
+            Anregungen und Feedback gerne an <a href="mailto:abfahrten@marudor.de">abfahrten@marudor.de</a>
+          </div>
         </Paper>
       </div>
     );
