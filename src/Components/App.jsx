@@ -22,6 +22,9 @@ reduxActions.handleActions = (function(old) {
     each(reducerMap, (r, index) => {
       reducerMap[index] = function(state, action) {
         const newState = r(state, action);
+        if (state === newState) {
+          return state;
+        }
         return {
           ...state,
           ...newState,

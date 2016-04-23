@@ -1,13 +1,13 @@
 // @flow
 import { AppBar, IconButton } from 'material-ui';
 import { autobind } from 'core-decorators';
-import favStore from '../Stores/favStore.js';
 import Radium from 'radium';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import Select from 'react-select';
-import stationStore from '../Stores/stationStore.js';
 import titleStore from '../Stores/titleStore.js';
+import { filter } from 'fuzzaldrin';
+import { sortBy, includes } from 'lodash';
 
 type State = {
   title: string,
@@ -77,15 +77,18 @@ export default class Toolbar extends React.Component {
   componentDidMount() {
     titleStore.on('title', this.handleTitle);
     titleStore.on('openInput', this.openInput);
-    favStore.on('favButton', this.handleFav);
   }
   componentWillUnmount() {
     titleStore.off('title', this.handleTitle);
     titleStore.off('openInput', this.openInput);
-    favStore.off('favButton', this.handleFav);
   }
   filterOptions(stations: any, input: string): Station[] {
-    return stationStore.getFilteredOptions(input);
+    const result = [];
+    filter(stations, input, { key: 'label' }).some((station, index) => {
+      result.push(station);
+      return index > 7;
+    });
+    return sortBy(result, r => !includes(r.label.toLowerCase(), 'hbf'));
   }
   @autobind
   openInput() {

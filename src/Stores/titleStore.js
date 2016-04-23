@@ -1,5 +1,4 @@
 import EventEmitter from 'eventemitter3';
-import favStore from './favStore.js';
 import React from 'react';
 
 const titleStyle = {
@@ -19,7 +18,6 @@ const titleStyle = {
 class TitleStore extends EventEmitter {
   resetTitle() {
     this.setTitle(this.defaultTitle);
-    favStore.favButton(null);
   }
   changeTitle(title) {
     this.setTitle(title);

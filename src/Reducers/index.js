@@ -1,6 +1,24 @@
 // @flow
 import { handleActions } from 'redux-actions';
-import type { List } from 'immutable';
+import { List, Map } from 'immutable';
+import rawStations from '../codes';
+
+const favKey = 'favs';
+let favorites = Map();
+const rawFavs = localStorage.getItem(favKey);
+if (rawFavs) {
+  const favs = JSON.parse(rawFavs);
+  favorites = Map(favs);
+}
+
+const mappedStations = rawStations.map((station) => ({
+  label: station.name,
+  value: station.DS100,
+}));
+let stations = Map();
+mappedStations.forEach(s => {
+  stations = stations.set(s.label, s);
+});
 
 export default handleActions({
   FETCH_ABFAHRTEN: (state, { payload }: { payload: List<Abfahrt> | { payload: { error: Error } }}) => {
@@ -14,7 +32,31 @@ export default handleActions({
       error: null,
     };
   },
+  FAV(state, { payload }: { payload: string }) {
+    const station: ?Station = state.stations.find((s: Station) => s.value === payload);
+    if (station) {
+      const favorites = state.favorites.set(station.value, true);
+      localStorage.setItem(favKey, JSON.stringify(favorites.toJS()));
+      return {
+        favorites,
+      };
+    }
+    return state;
+  },
+  UNFAV(state, { payload }: { payload: string }) {
+    const station: ?Station = state.stations.find((s: Station) => s.value === payload);
+    if (station) {
+      const favorites = state.favorites.delete(station.value);
+      localStorage.setItem(favKey, JSON.stringify(favorites.toJS()));
+      return {
+        favorites,
+      };
+    }
+    return state;
+  },
 }, {
   abfahrten: null,
   error: null,
+  favorites,
+  stations,
 });

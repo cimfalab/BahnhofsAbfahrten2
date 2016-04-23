@@ -2,15 +2,13 @@
 import { createAction } from 'redux-actions';
 import { List } from 'immutable';
 import axios from 'axios';
-import stationStore from '../Stores/stationStore.js';
 
-export const fetchAbfahrten = createAction('FETCH_ABFAHRTEN', async (target: string) => {
+export const fetchAbfahrten = createAction('FETCH_ABFAHRTEN', async (station: Station) => {
   try {
-    const stationObject = stationStore.getIndexed()[target];
     const abfahrten: {
       error?: any,
       departures: Abfahrt[],
-    } = await axios.get(`/api/${stationObject.value}`, {
+    } = await axios.get(`/api/${station.value}`, {
       params: {
         mode: 'marudor',
         backend: 'iris',

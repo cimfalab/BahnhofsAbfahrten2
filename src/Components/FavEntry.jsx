@@ -14,6 +14,7 @@ const style = {
     cursor: 'pointer',
     fontSize: '3em',
     lineHeight: 1.3,
+    marginBottom: 1,
   },
   station: {
     ':hover': {

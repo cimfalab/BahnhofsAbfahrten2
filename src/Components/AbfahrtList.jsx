@@ -5,12 +5,12 @@ import { autobind } from 'core-decorators';
 import { clearAbfahrten, fetchAbfahrten } from '../Actions/abfahrten';
 import { connect } from 'react-redux';
 import AbfahrtEntry from './AbfahrtEntry.jsx';
-import favStore from '../Stores/favStore.js';
 import Loading from './Loading.jsx';
 import Radium from 'radium';
 import React from 'react';
 import titleStore from '../Stores/titleStore.js';
-import type { List } from 'immutable';
+import type { List, Map } from 'immutable';
+import { fav, unfav } from '../Actions/favs';
 
 type Props = {
   abfahrten?: List<Abfahrt>,
@@ -18,6 +18,8 @@ type Props = {
   params: {
     station: string,
   },
+  favorites?: Map<string, bool>,
+  stations?: Map<string, Station>,
 }
 
 const style = {
@@ -32,58 +34,37 @@ const style = {
 @connect(state => ({
   abfahrten: state.abfahrten,
   error: state.error,
+  favorites: state.favorites,
+  stations: state.stations,
 }))
 class AbfahrtList extends React.Component {
   props: Props;
   @autobind
   fav() {
-    favStore.fav(this.props.params.station);
+    fav(this.props.params.station);
   }
   @autobind
   unfav() {
-    favStore.unfav(this.props.params.station);
+    unfav(this.props.params.station);
+  }
+  getStation(stationString: string) {
+    if (this.props.stations) {
+      return this.props.stations.get(stationString.replace('%2F', '/'));
+    }
+    return '';
   }
   componentWillReceiveProps(newProps: Props) {
     if (newProps.params.station !== this.props.params.station) {
       clearAbfahrten();
-      this.getAbfahrten(newProps.params.station.replace('%2F', '/'));
-    }
-  }
-  @autobind
-  handleFav() {
-    if (favStore.isFaved(this.props.params.station)) {
-      favStore.favButton({
-        type: 'unfav',
-        fn: this.unfav,
-      });
-    } else {
-      favStore.favButton({
-        type: 'fav',
-        fn: this.fav,
-      });
+      this.getAbfahrten(newProps.params.station);
     }
   }
   componentDidMount() {
-    favStore.on('fav', this.handleFav);
-    this.getAbfahrten(this.props.params.station.replace('%2F', '/'));
-  }
-  componentWillUnmount() {
-    favStore.off('fav', this.handleFav);
+    this.getAbfahrten(this.props.params.station);
   }
   getAbfahrten(station: string) {
-    fetchAbfahrten(station);
+    fetchAbfahrten(this.getStation(station));
     titleStore.changeTitle(titleStore.getTitle(station));
-    if (favStore.isFaved(station)) {
-      favStore.favButton({
-        type: 'unfav',
-        fn: this.unfav,
-      });
-    } else {
-      favStore.favButton({
-        type: 'fav',
-        fn: this.fav,
-      });
-    }
   }
   beautifyError(error: string) {
     if (_.includes(error, 'Got no results')) {

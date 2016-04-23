@@ -1,15 +1,15 @@
 /* @flow */
+import { connect } from 'react-redux';
 import { Paper } from 'material-ui';
 import FavEntry from './FavEntry.jsx';
-import favStore from '../Stores/favStore.js';
 import Radium from 'radium';
 import React from 'react';
 import Spenden from './Spenden';
 import titleStore from '../Stores/titleStore.js';
 import type { Map } from 'immutable';
 
-type State = {
-  favs: Map<string, bool>,
+type Props = {
+  favorites?: Map<string, bool>,
 }
 
 const style = {
@@ -21,16 +21,18 @@ const style = {
 };
 
 @Radium
+@connect(state => ({
+  favorites: state.favorites,
+}))
 export default class extends React.Component {
-  state: State = {
-    favs: favStore.getAll(),
-  };
+  props: Props;
   constructor() {
     super();
     titleStore.resetTitle();
   }
   render() {
-    if (this.state.favs.size <= 0) {
+    const { favorites } = this.props;
+    if (!favorites || favorites.size <= 0) {
       return (
         <div style={style.wrap}>
           <Paper>
@@ -42,7 +44,9 @@ export default class extends React.Component {
     }
     return (
       <div style={style.wrap}>
-        {this.state.favs.map((x, fav) => <FavEntry fav={fav} key={fav}/>)}
+        {
+          favorites.map((x, fav) => <FavEntry fav={fav} key={fav}/>).toList()
+        }
         <Spenden/>
       </div>
     );
