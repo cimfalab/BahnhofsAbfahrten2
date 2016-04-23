@@ -7,7 +7,7 @@ import Radium from 'radium';
 import React from 'react';
 
 
-function normalizeName(name) {
+function normalizeName(name: string) {
   let normalizedName = name.replace(/([^ ])\(/, '$1 (');
   normalizedName = name.replace(/\)(.)/, ') $1');
   normalizedName = name.replace(/Frankfurt \(M\)/, 'Frankfurt (Main)');
@@ -22,104 +22,103 @@ type State = {
   detail: bool,
 }
 
-/*::`*/
+const style = {
+  wrapper: {
+    boxShadow: '0 1px 0 rgba(0, 0, 0, 0.24)',
+    cursor: 'pointer',
+    flexShrink: 0,
+    marginBottom: 5,
+    overflow: 'hidden',
+    paddingLeft: 15,
+    paddingRight: 15,
+  },
+  entry: {
+    display: 'flex',
+    flexShrink: 0,
+    fontSize: '0.6em',
+    lineHeight: 1,
+    paddingTop: 5,
+    userSelect: 'none',
+    '@media screen and (max-width: 1200px)': {
+      fontSize: '0.3em',
+    },
+  },
+  cancelled: {
+    textDecoration: 'line-through',
+  },
+  detail: {
+    mid: {
+      whiteSpace: 'normal',
+    },
+    hbf: {
+      fontWeight: 'bold',
+    },
+  },
+  train: {
+    flex: 1,
+    fontSize: '3em',
+    lineHeight: 1.2,
+    maxWidth: 280,
+    '@media screen and (max-width: 1200px)': {
+      maxWidth: 75,
+    },
+  },
+  mid: {
+    display: 'flex',
+    flex: 1,
+    flexDirection: 'column',
+    justifyContent: 'space-between',
+    lineHeight: 1.2,
+    overflow: 'hidden',
+    whiteSpace: 'nowrap',
+  },
+  destination: {
+    fontSize: '4em',
+  },
+  via: {
+    fontSize: '2.1em',
+    lineHeight: 1.2,
+    overflow: 'hidden',
+    textOverflow: 'ellipsis',
+  },
+  info: {
+    textDecoration: 'none',
+    color: 'red',
+    fontSize: '2.1em',
+    overflow: 'hidden',
+    textOverflow: 'ellipsis',
+  },
+  end: {
+    alignItems: 'flex-end',
+    display: 'flex',
+    flexDirection: 'column',
+    justifyContent: 'space-between',
+    marginLeft: 15,
+  },
+  time: {
+    fontSize: '2.4em',
+  },
+  early: {
+    color: 'green',
+    fontSize: '3em',
+    marginRight: '0.4em',
+  },
+  delay: {
+    color: 'red',
+    fontSize: '3em',
+    marginRight: '0.4em',
+  },
+  platform: {
+    fontSize: '3em',
+  },
+  additional: {
+    color: 'red',
+  },
+};
+
 @Radium
-/*::`*/
 export default class AbfahrtEntry extends React.Component {
   props: Props;
-  static style = {
-    wrapper: {
-      boxShadow: '0 1px 0 rgba(0, 0, 0, 0.24)',
-      cursor: 'pointer',
-      flexShrink: 0,
-      marginBottom: 5,
-      overflow: 'hidden',
-      paddingLeft: 15,
-      paddingRight: 15,
-    },
-    entry: {
-      display: 'flex',
-      flexShrink: 0,
-      fontSize: '0.6em',
-      lineHeight: 1,
-      paddingTop: 5,
-      userSelect: 'none',
-      '@media screen and (max-width: 1200px)': {
-        fontSize: '0.3em',
-      },
-    },
-    cancelled: {
-      textDecoration: 'line-through',
-    },
-    detail: {
-      mid: {
-        whiteSpace: 'normal',
-      },
-      hbf: {
-        fontWeight: 'bold',
-      },
-    },
-    train: {
-      flex: 1,
-      fontSize: '3em',
-      lineHeight: 1.2,
-      maxWidth: 280,
-      '@media screen and (max-width: 1200px)': {
-        maxWidth: 75,
-      },
-    },
-    mid: {
-      display: 'flex',
-      flex: 1,
-      flexDirection: 'column',
-      justifyContent: 'space-between',
-      lineHeight: 1.2,
-      overflow: 'hidden',
-      whiteSpace: 'nowrap',
-    },
-    destination: {
-      fontSize: '4em',
-    },
-    via: {
-      fontSize: '2.1em',
-      lineHeight: 1.2,
-      overflow: 'hidden',
-      textOverflow: 'ellipsis',
-    },
-    info: {
-      textDecoration: 'none',
-      color: 'red',
-      fontSize: '2.1em',
-      overflow: 'hidden',
-      textOverflow: 'ellipsis',
-    },
-    end: {
-      alignItems: 'flex-end',
-      display: 'flex',
-      flexDirection: 'column',
-      justifyContent: 'space-between',
-      marginLeft: 15,
-    },
-    time: {
-      fontSize: '2.4em',
-    },
-    early: {
-      color: 'green',
-      fontSize: '3em',
-      marginRight: '0.4em',
-    },
-    delay: {
-      color: 'red',
-      fontSize: '3em',
-      marginRight: '0.4em',
-    },
-    platform: {
-      fontSize: '3em',
-    },
-    additional: {
-      color: 'red',
-    },
-  };
   state: State = {
     detail: false,
   };
@@ -136,7 +135,6 @@ export default class AbfahrtEntry extends React.Component {
   }
   getAbfahrt(name: string, index: number, length: number, abfahrt: Abfahrt, isCancelled?: ?number, isAdditional?: ?number): Array<any> {
     const via = [];
-    const style = AbfahrtEntry.style;
     const lowerName = name.toLowerCase();
     const isHbf = _.includes(lowerName, 'hbf') || _.includes(lowerName, 'centraal') || _.includes(lowerName, 'centrale') || _.includes(lowerName, 'termini');
     via.push(<span key={`${index}i`} style={[isCancelled && style.cancelled, isAdditional && style.additional, isHbf && style.detail.hbf]}>{normalizeName(name)}</span>);
@@ -162,7 +160,6 @@ export default class AbfahrtEntry extends React.Component {
     return via;
   }
   getVia(abfahrt: Abfahrt, isCancelled?: number) {
-    const style = AbfahrtEntry.style;
     let via = [];
     if (this.state.detail) {
       via = this.getDetailedVia(abfahrt, isCancelled);
@@ -186,14 +183,12 @@ export default class AbfahrtEntry extends React.Component {
     for (let i = 1; i < abfahrt.messages.delay.length; i++) {
       info += ` +++ ${abfahrt.messages.delay[i].text}`;
     }
-    const style = AbfahrtEntry.style;
     return info ? <div key="i" style={style.info}>{info}</div> : null;
   }
   getDelay(abfahrt: Abfahrt) {
     if ((!abfahrt.delayDeparture && !abfahrt.delayArrival) || abfahrt.isCancelled) {
       return null;
     }
-    const style = AbfahrtEntry.style;
     let delay = abfahrt.delayDeparture || abfahrt.delayArrival;
     if ((abfahrt.delayDeparture || abfahrt.delayArrival) > 0) {
       delay = `+${delay}`;
@@ -223,7 +218,6 @@ export default class AbfahrtEntry extends React.Component {
       info = [info, this.getVia(abfahrt)];
     }
     const delay = this.getDelay(abfahrt);
-    const style = AbfahrtEntry.style;
     const entryStyle = style.entry;
     return (
       <Paper key="p"

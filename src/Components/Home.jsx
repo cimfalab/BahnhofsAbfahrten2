@@ -20,9 +20,7 @@ const style = {
   },
 };
 
-/*::`*/
 @Radium
-/*::`*/
 export default class extends React.Component {
   state: State = {
     favs: favStore.getAll(),

@@ -1,41 +1,40 @@
 // @flow
+// import { Paper } from 'material-ui';
 import _ from 'lodash';
-import { Paper } from 'material-ui';
+import { autobind } from 'core-decorators';
+import { clearAbfahrten, fetchAbfahrten } from '../Actions/abfahrten';
+import { connect } from 'react-redux';
 import AbfahrtEntry from './AbfahrtEntry.jsx';
-import abfahrtStore from '../Stores/abfahrtStore.js';
 import favStore from '../Stores/favStore.js';
 import Loading from './Loading.jsx';
 import Radium from 'radium';
 import React from 'react';
 import titleStore from '../Stores/titleStore.js';
-import { autobind } from 'core-decorators';
-
-type State = {
-  abfahrten: Abfahrt[],
-  error?: ?string,
-}
+import type { List } from 'immutable';
 
 type Props = {
+  abfahrten?: List<Abfahrt>,
+  error?: Error,
   params: {
     station: string,
   },
 }
 
-/*::`*/
+const style = {
+  list: {
+    display: 'flex',
+    flexDirection: 'column',
+    overflow: 'auto',
+  },
+};
+
 @Radium
-/*::`*/
+@connect(state => ({
+  abfahrten: state.abfahrten,
+  error: state.error,
+}))
 class AbfahrtList extends React.Component {
   props: Props;
-  static style = {
-    list: {
-      display: 'flex',
-      flexDirection: 'column',
-      overflow: 'auto',
-    },
-  };
-  state: State = {
-    abfahrten: [],
-  };
   @autobind
   fav() {
     favStore.fav(this.props.params.station);
@@ -45,15 +44,10 @@ class AbfahrtList extends React.Component {
     favStore.unfav(this.props.params.station);
   }
   componentWillReceiveProps(newProps: Props) {
-    abfahrtStore.clearAbfahrten();
-    this.getAbfahrten(newProps.params.station.replace('%2F', '/'));
-  }
-  @autobind
-  handleAbfahrten(abfahrten: Abfahrt[]) {
-    this.setState({
-      abfahrten,
-      error: null,
-    });
+    if (newProps.params.station !== this.props.params.station) {
+      clearAbfahrten();
+      this.getAbfahrten(newProps.params.station.replace('%2F', '/'));
+    }
   }
   @autobind
   handleFav() {
@@ -69,25 +63,15 @@ class AbfahrtList extends React.Component {
       });
     }
   }
-  @autobind
-  handleError(error: any) {
-    this.setState({
-      error,
-    });
-  }
   componentDidMount() {
-    abfahrtStore.on('abfahrten', this.handleAbfahrten);
-    abfahrtStore.on('error', this.handleError);
     favStore.on('fav', this.handleFav);
     this.getAbfahrten(this.props.params.station.replace('%2F', '/'));
   }
   componentWillUnmount() {
-    abfahrtStore.off('abfahrten', this.handleAbfahrten);
-    abfahrtStore.off('error', this.handleError);
     favStore.off('fav', this.handleFav);
   }
   getAbfahrten(station: string) {
-    abfahrtStore.requestAbfahrten(station);
+    fetchAbfahrten(station);
     titleStore.changeTitle(titleStore.getTitle(station));
     if (favStore.isFaved(station)) {
       favStore.favButton({
@@ -108,45 +92,33 @@ class AbfahrtList extends React.Component {
     return undefined;
   }
   render() {
-    if (this.state.error) {
-      let errorContent = this.beautifyError(this.state.error);
-      if (!errorContent) {
-        errorContent = (
-          <span>
-          Well this did not work.
-          <br/>
-          {this.state.error}
-          <br/>
-          <a
-          href="https://github.com/marudor/BahnhofsAbfahrten/issues"
-          target="_new">Issue erstellen</a>
-          </span>
-        );
-      }
+    const { abfahrten, error } = this.props;
+    if (error) {
       return (
-        <Paper className="error">
-        {errorContent}
-        </Paper>
+        <div>
+          Whoops!
+          <br/>
+          {error}
+        </div>
       );
     }
-    if (_.isEmpty(this.state.abfahrten)) {
+    if (!abfahrten) {
       return (
         <Loading/>
       );
     }
-    const style = AbfahrtList.style;
     return (
       <div style={style.list}>
-      {
-        _.map(this.state.abfahrten, (abfahrt) => {
-          const key = abfahrt.train + (abfahrt.scheduledDeparture || abfahrt.scheduledArrival);
-          return (
-            <AbfahrtEntry
-            key={key}
-            abfahrt={abfahrt}/>
-          );
-        })
-      }
+        {
+          abfahrten.map(abfahrt => {
+            const key = abfahrt.train + (abfahrt.scheduledDeparture || abfahrt.scheduledArrival);
+            return (
+              <AbfahrtEntry
+                key={key}
+                abfahrt={abfahrt}/>
+            );
+          })
+        }
       </div>
     );
   }

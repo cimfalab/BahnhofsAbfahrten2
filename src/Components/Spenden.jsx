@@ -21,9 +21,7 @@ const style = {
   },
 };
 
-/*::`*/
 @Radium
-/*::`*/
 export default class Spenden extends React.Component {
   render() {
     return (

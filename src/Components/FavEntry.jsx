@@ -8,26 +8,25 @@ type Props = {
   fav: string,
 }
 
-/*::`*/
+const style = {
+  fav: {
+    boxShadow: '0 1px 0 rgba(0, 0, 0, 0.24)',
+    cursor: 'pointer',
+    fontSize: '3em',
+    lineHeight: 1.3,
+  },
+  station: {
+    ':hover': {
+      backgroundColor: 'rgb(238, 238, 238)',
+    },
+  },
+};
+
 @Radium
-/*::`*/
 export default class FavEntry extends React.Component {
   props: Props;
   static contextTypes = {
     router: React.PropTypes.object,
-  };
-  static style = {
-    fav: {
-      boxShadow: '0 1px 0 rgba(0, 0, 0, 0.24)',
-      cursor: 'pointer',
-      fontSize: '3em',
-      lineHeight: 1.3,
-    },
-    station: {
-      ':hover': {
-        backgroundColor: 'rgb(238, 238, 238)',
-      },
-    },
   };
   @autobind
   transitionTo() {
@@ -35,7 +34,6 @@ export default class FavEntry extends React.Component {
   }
   render() {
     const station = this.props.fav.replace('%2F', '/');
-    const style = FavEntry.style;
     return (
       <Paper onClick={this.transitionTo} style={style.fav}>
         <div style={style.station}>{station}</div>

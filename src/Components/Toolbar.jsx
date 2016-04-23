@@ -17,32 +17,31 @@ type State = {
   favFn?: Function,
 }
 
-/*::`*/
+const style = {
+  appBar: {
+    alignItems: 'center',
+    overflow: 'visible',
+  },
+  icon: {
+    color: 'white',
+    fill: 'white',
+  },
+  icons: {
+    display: 'block',
+    marginTop: -8,
+  },
+  selectWrap: {
+    lineHeight: '32px',
+  },
+};
+
 @Radium
-/*::`*/
 export default class Toolbar extends React.Component {
   static contextTypes = {
     router: React.PropTypes.object,
   };
   static childContextTypes = {
     muiTheme: React.PropTypes.object,
-  };
-  static style = {
-    appBar: {
-      alignItems: 'center',
-      overflow: 'visible',
-    },
-    icon: {
-      color: 'white',
-      fill: 'white',
-    },
-    icons: {
-      display: 'block',
-      marginTop: -8,
-    },
-    selectWrap: {
-      lineHeight: '32px',
-    },
   };
   state: State = {
     title: titleStore.defaultTitle,
@@ -91,7 +90,7 @@ export default class Toolbar extends React.Component {
   @autobind
   openInput() {
     titleStore.changeTitle(
-      <div style={Toolbar.style.selectWrap}>
+      <div style={style.selectWrap}>
         <Select placeholder="Bahnhof..." filterOptions={this.filterOptions} onBlur={this.onBlur} onChange={this.submit}/>
       </div>
     );
@@ -125,7 +124,6 @@ export default class Toolbar extends React.Component {
     this.context.router.push(`/${stationLabel.replace('/', '%F')}`);
   }
   render() {
-    const style = Toolbar.style;
     const { fav, favFn, station } = this.state;
     const searchIcon = station ? '' : (
       <IconButton

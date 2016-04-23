@@ -14,6 +14,8 @@ node_modules/iflow-lodash/index.js.flow
 node_modules/iflow-axios/index.js.flow
 node_modules/iflow-core-decorators/index.js.flow
 node_modules/iflow-material-ui/index.js.flow
+node_modules/iflow-redux/index.js.flow
+node_modules/iflow-redux-actions/index.js.flow
 
 [options]
 module.name_mapper='config$' -> 'config.development.js'
