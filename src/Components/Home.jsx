@@ -47,7 +47,8 @@ export default class extends React.Component {
     return (
       <div style={style.wrap}>
         {
-          favorites.map((x, stationVal) => stations.find(x => x.value === stationVal) || {}).map((fav) => <FavEntry fav={fav.label} key={fav.value}/>).toList()
+          // $FlowFixMe
+          favorites.map((x, stationVal) => stations.find(x => x.value === stationVal)).map((fav) => <FavEntry fav={fav.label} key={fav.value}/>).toList()
         }
         <Spenden/>
       </div>

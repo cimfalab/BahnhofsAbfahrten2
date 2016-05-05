@@ -20,6 +20,10 @@ mappedStations.forEach(s => {
   stations = stations.set(s.label, s);
 });
 
+favorites.map(f => stations.find(x => x.value === f)).filter(x => !x).forEach((f, key) => {
+  favorites = favorites.remove(key);
+});
+
 export default handleActions({
   SET_SELECTED_STATION(state, { payload }) {
     return {
