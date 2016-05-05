@@ -2,11 +2,9 @@
 import AppCss from './App.CSS';
 import Radium, { Style, StyleRoot } from 'radium';
 import React from 'react';
-import Toolbar from './Toolbar.jsx';
 import reduxPromise from 'redux-promise';
 import { Provider } from 'react-redux';
 import { createStore, compose, applyMiddleware, bindActionCreators } from 'redux';
-import Reducer from '../Reducers';
 import { each } from 'lodash';
 
 const reduxActions = require('redux-actions');
@@ -38,10 +36,16 @@ reduxActions.handleActions = (function(old) {
 type Props = {
   children?: any,
 }
+
+const Reducer = require('../Reducers').default;
 const store = compose(
   applyMiddleware(reduxPromise),
   window.devToolsExtension ? window.devToolsExtension() : f => f,
 )(createStore)(Reducer);
+
+if (process.env.node_env !== 'production') {
+  global.store = store;
+}
 
 if (module.hot) {
   module.hot.accept('../Reducers', () => {
@@ -57,6 +61,8 @@ const style = {
     height: '100%',
   },
 };
+
+const Toolbar = require('./Toolbar').default;
 
 @Radium
 export default class App extends React.Component {

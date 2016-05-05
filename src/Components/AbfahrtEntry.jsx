@@ -2,9 +2,10 @@
 import _ from 'lodash';
 import { autobind } from 'core-decorators';
 import { Paper } from 'material-ui';
-import detailStore from '../Stores/detailStore.js';
+import { setDetail } from '../Actions/abfahrten';
 import Radium from 'radium';
 import React from 'react';
+import PureRender from 'pure-render-decorator';
 
 
 function normalizeName(name: string) {
@@ -16,9 +17,6 @@ function normalizeName(name: string) {
 
 type Props = {
   abfahrt: Abfahrt,
-}
-
-type State = {
   detail: bool,
 }
 
@@ -116,23 +114,10 @@ const style = {
   },
 };
 
+@PureRender
 @Radium
 export default class AbfahrtEntry extends React.Component {
   props: Props;
-  state: State = {
-    detail: false,
-  };
-  @autobind
-  handleDetail(entry: AbfahrtEntry) {
-    if (entry !== this) {
-      this.setState({
-        detail: false,
-      });
-    }
-  }
-  componentWillUnmount() {
-    detailStore.off('detail', this.handleDetail);
-  }
   getAbfahrt(name: string, index: number, length: number, abfahrt: Abfahrt, isCancelled?: ?number, isAdditional?: ?number): Array<any> {
     const via = [];
     const lowerName = name.toLowerCase();
@@ -161,7 +146,7 @@ export default class AbfahrtEntry extends React.Component {
   }
   getVia(abfahrt: Abfahrt, isCancelled?: number) {
     let via = [];
-    if (this.state.detail) {
+    if (this.props.detail) {
       via = this.getDetailedVia(abfahrt, isCancelled);
     } else {
       via = this.getNormalVia(abfahrt, isCancelled);
@@ -199,16 +184,14 @@ export default class AbfahrtEntry extends React.Component {
   }
   @autobind
   onClick() {
-    detailStore.setDetail(this);
-    detailStore.on('detail', this.handleDetail);
-    const newVal = !this.state.detail;
-    this.setState({
-      detail: newVal,
-    });
+    if (this.props.detail) {
+      setDetail(null);
+    } else {
+      setDetail(this.props.abfahrt);
+    }
   }
   render() {
-    const { detail } = this.state;
-    const abfahrt = this.props.abfahrt;
+    const { abfahrt, detail } = this.props;
     let info = this.getInfo(abfahrt);
     const cancel = abfahrt.isCancelled;
     if (!detail && !info) {

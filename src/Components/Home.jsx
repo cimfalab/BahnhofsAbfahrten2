@@ -10,6 +10,7 @@ import type { Map } from 'immutable';
 
 type Props = {
   favorites?: Map<string, bool>,
+  stations?: Map<string, Station>,
 }
 
 const style = {
@@ -23,6 +24,7 @@ const style = {
 @Radium
 @connect(state => ({
   favorites: state.favorites,
+  stations: state.stations,
 }))
 export default class extends React.Component {
   props: Props;
@@ -31,8 +33,8 @@ export default class extends React.Component {
     titleStore.resetTitle();
   }
   render() {
-    const { favorites } = this.props;
-    if (!favorites || favorites.size <= 0) {
+    const { favorites, stations } = this.props;
+    if (!favorites || favorites.size <= 0 || !stations) {
       return (
         <div style={style.wrap}>
           <Paper>
@@ -45,7 +47,7 @@ export default class extends React.Component {
     return (
       <div style={style.wrap}>
         {
-          favorites.map((x, fav) => <FavEntry fav={fav} key={fav}/>).toList()
+          favorites.map((x, stationVal) => stations.find(x => x.value === stationVal) || {}).map((fav) => <FavEntry fav={fav.label} key={fav.value}/>).toList()
         }
         <Spenden/>
       </div>

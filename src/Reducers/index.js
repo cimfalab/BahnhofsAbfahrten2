@@ -21,6 +21,11 @@ mappedStations.forEach(s => {
 });
 
 export default handleActions({
+  SET_SELECTED_STATION(state, { payload }) {
+    return {
+      selectedStation: payload,
+    };
+  },
   FETCH_ABFAHRTEN: (state, { payload }: { payload: List<Abfahrt> | { payload: { error: Error } }}) => {
     if (payload && payload.error) {
       return {
@@ -54,9 +59,15 @@ export default handleActions({
     }
     return state;
   },
+  SET_DETAIL(state, { payload }) {
+    return {
+      selectedDetail: payload,
+    };
+  },
 }, {
   abfahrten: null,
   error: null,
   favorites,
   stations,
+  selectedDetail: null,
 });

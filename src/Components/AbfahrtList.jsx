@@ -2,7 +2,7 @@
 // import { Paper } from 'material-ui';
 import _ from 'lodash';
 import { autobind } from 'core-decorators';
-import { clearAbfahrten, fetchAbfahrten } from '../Actions/abfahrten';
+import { clearAbfahrten, fetchAbfahrten, setSelectedStation } from '../Actions/abfahrten';
 import { connect } from 'react-redux';
 import AbfahrtEntry from './AbfahrtEntry.jsx';
 import Loading from './Loading.jsx';
@@ -20,6 +20,7 @@ type Props = {
   },
   favorites?: Map<string, bool>,
   stations?: Map<string, Station>,
+  selectedDetail?: Abfahrt,
 }
 
 const style = {
@@ -36,6 +37,7 @@ const style = {
   error: state.error,
   favorites: state.favorites,
   stations: state.stations,
+  selectedDetail: state.selectedDetail,
 }))
 class AbfahrtList extends React.Component {
   props: Props;
@@ -51,7 +53,7 @@ class AbfahrtList extends React.Component {
     if (this.props.stations) {
       return this.props.stations.get(stationString.replace('%2F', '/'));
     }
-    return '';
+    return { label: '', value: '' };
   }
   componentWillReceiveProps(newProps: Props) {
     if (newProps.params.station !== this.props.params.station) {
@@ -63,7 +65,9 @@ class AbfahrtList extends React.Component {
     this.getAbfahrten(this.props.params.station);
   }
   getAbfahrten(station: string) {
-    fetchAbfahrten(this.getStation(station));
+    const st = this.getStation(station);
+    setSelectedStation(st);
+    fetchAbfahrten(st);
     titleStore.changeTitle(titleStore.getTitle(station));
   }
   beautifyError(error: string) {
@@ -73,7 +77,7 @@ class AbfahrtList extends React.Component {
     return undefined;
   }
   render() {
-    const { abfahrten, error } = this.props;
+    const { abfahrten, error, selectedDetail } = this.props;
     if (error) {
       return (
         <div>
@@ -95,6 +99,7 @@ class AbfahrtList extends React.Component {
             const key = abfahrt.train + (abfahrt.scheduledDeparture || abfahrt.scheduledArrival);
             return (
               <AbfahrtEntry
+                detail={selectedDetail === abfahrt}
                 key={key}
                 abfahrt={abfahrt}/>
             );

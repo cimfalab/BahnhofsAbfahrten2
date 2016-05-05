@@ -1,20 +1,26 @@
 // @flow
 import { AppBar, IconButton } from 'material-ui';
 import { autobind } from 'core-decorators';
+import { connect } from 'react-redux';
+import { fav, unfav } from '../Actions/favs';
+import { filter } from 'fuzzaldrin';
+import { sortBy, includes } from 'lodash';
 import Radium from 'radium';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import Select from 'react-select';
 import titleStore from '../Stores/titleStore.js';
-import { filter } from 'fuzzaldrin';
-import { sortBy, includes } from 'lodash';
+import type { Map } from 'immutable';
 
+type Props = {
+  stations?: Map<string, Station>,
+  favorites?: Map<string, bool>,
+  selectedStation?: Station,
+}
 type State = {
   title: string,
   oldTitle?: string,
   station?: string,
-  fav?: string,
-  favFn?: Function,
 }
 
 const style = {
@@ -35,8 +41,14 @@ const style = {
   },
 };
 
+@connect(state => ({
+  stations: state.stations,
+  favorites: state.favorites,
+  selectedStation: state.selectedStation,
+}))
 @Radium
 export default class Toolbar extends React.Component {
+  props: Props;
   static contextTypes = {
     router: React.PropTypes.object,
   };
@@ -60,20 +72,6 @@ export default class Toolbar extends React.Component {
       oldTitle,
     });
   }
-  @autobind
-  handleFav(fav?: { type: string, fn: Function }) {
-    if (fav) {
-      this.setState({
-        fav: fav.type,
-        favFn: fav.fn,
-      });
-    } else {
-      this.setState({
-        fav: undefined,
-        favFn: undefined,
-      });
-    }
-  }
   componentDidMount() {
     titleStore.on('title', this.handleTitle);
     titleStore.on('openInput', this.openInput);
@@ -82,9 +80,14 @@ export default class Toolbar extends React.Component {
     titleStore.off('title', this.handleTitle);
     titleStore.off('openInput', this.openInput);
   }
-  filterOptions(stations: any, input: string): Station[] {
+  @autobind
+  filterOptions(placeholder: any, input: string): Station[] {
     const result = [];
-    filter(stations, input, { key: 'label' }).some((station, index) => {
+    const stations = this.props.stations;
+    if (!stations) {
+      return [];
+    }
+    filter(stations.toArray(), input, { key: 'label' }).some((station, index) => {
       result.push(station);
       return index > 7;
     });
@@ -126,8 +129,27 @@ export default class Toolbar extends React.Component {
     }
     this.context.router.push(`/${stationLabel.replace('/', '%F')}`);
   }
+  @autobind
+  handleUnfav() {
+    const { selectedStation } = this.props;
+    if (selectedStation) {
+      unfav(selectedStation.value);
+    }
+  }
+  @autobind
+  handleFav() {
+    const { selectedStation } = this.props;
+    if (selectedStation) {
+      fav(selectedStation.value);
+    }
+  }
+  @autobind
+  goHome() {
+    this.context.router.push('/');
+  }
   render() {
-    const { fav, favFn, station } = this.state;
+    const { favorites, selectedStation } = this.props;
+    const { station } = this.state;
     const searchIcon = station ? '' : (
       <IconButton
         iconStyle={style.icon}
@@ -136,18 +158,26 @@ export default class Toolbar extends React.Component {
     );
     let favClass;
     let favBtn;
-    if (fav === 'fav') {
-      favClass = 'mdi mdi-favorite-border';
-      favBtn = (<IconButton iconStyle={style.icon} iconClassName={favClass} onClick={favFn}/>);
-    } else if (fav === 'unfav') {
-      favClass = 'mdi mdi-favorite';
-      favBtn = (<IconButton iconStyle={style.icon} iconClassName={favClass} onClick={favFn}/>);
+    if (selectedStation && favorites) {
+      const favved = favorites.has(selectedStation.value);
+      if (favved) {
+        favClass = 'mdi mdi-favorite';
+        favBtn = (<IconButton iconStyle={style.icon} iconClassName={favClass} onClick={this.handleUnfav}/>);
+      } else {
+        favClass = 'mdi mdi-favorite-border';
+        favBtn = (<IconButton iconStyle={style.icon} iconClassName={favClass} onClick={this.handleFav}/>);
+      }
     }
     const icons = (<span style={style.icons}>{searchIcon}{favBtn}</span>);
+    const homeIcon = (
+      <span style={style.icons}>
+        <IconButton onClick={this.goHome} iconStyle={style.icon} style={style.icon} iconClassName="mdi mdi-home"/>
+      </span>
+    );
     return (
       <AppBar style={style.appBar}
-        showMenuIconButton={false}
         title={this.state.title}
+        iconElementLeft={homeIcon}
         iconElementRight={icons}/>
     );
   }
