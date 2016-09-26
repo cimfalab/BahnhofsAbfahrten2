@@ -71,6 +71,18 @@ module.exports = {
   plugins,
   devServer: {
     proxy: {
+      '/api/search/*': {
+        toProxy: true,
+        xfwd: true,
+        changeOrigin: true,
+        target: 'http://localhost:9042/',
+      },
+      '/api/abfahrten/*': {
+        toProxy: true,
+        xfwd: true,
+        changeOrigin: true,
+        target: 'http://localhost:9042/',
+      },
       '/api/*': {
         toProxy: true,
         xfwd: true,

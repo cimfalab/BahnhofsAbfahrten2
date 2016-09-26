@@ -10,6 +10,7 @@ import Radium from 'radium';
 import React from 'react';
 import titleStore from '../Stores/titleStore.js';
 import type { List, Map } from 'immutable';
+import axios from 'axios';
 import { fav, unfav } from '../Actions/favs';
 
 type Props = {
@@ -18,8 +19,7 @@ type Props = {
   params: {
     station: string,
   },
-  favorites?: Map<string, bool>,
-  stations?: Map<string, Station>,
+  favorites?: Map<number, bool>,
   selectedDetail?: Abfahrt,
 }
 
@@ -36,7 +36,6 @@ const style = {
   abfahrten: state.abfahrten,
   error: state.error,
   favorites: state.favorites,
-  stations: state.stations,
   selectedDetail: state.selectedDetail,
 }))
 class AbfahrtList extends React.Component {
@@ -49,11 +48,13 @@ class AbfahrtList extends React.Component {
   unfav() {
     unfav(this.props.params.station);
   }
-  getStation(stationString: string) {
-    if (this.props.stations) {
-      return this.props.stations.get(stationString.replace('%2F', '/'));
+  async getStation(stationString: string) {
+    const possibleStations = (await axios.get(`/api/search/${stationString}`)).data;
+    if (possibleStations.length) {
+      const station = possibleStations[0];
+      return station;
     }
-    return { label: '', value: '' };
+    return { title: '', id: 0 };
   }
   componentWillReceiveProps(newProps: Props) {
     if (newProps.params.station !== this.props.params.station) {
@@ -64,8 +65,8 @@ class AbfahrtList extends React.Component {
   componentDidMount() {
     this.getAbfahrten(this.props.params.station);
   }
-  getAbfahrten(station: string) {
-    const st = this.getStation(station);
+  async getAbfahrten(station: string) {
+    const st = await this.getStation(station);
     setSelectedStation(st);
     fetchAbfahrten(st);
     titleStore.changeTitle(titleStore.getTitle(station));

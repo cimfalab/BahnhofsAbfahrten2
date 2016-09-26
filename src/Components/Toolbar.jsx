@@ -3,18 +3,16 @@ import { AppBar, IconButton } from 'material-ui';
 import { autobind } from 'core-decorators';
 import { connect } from 'react-redux';
 import { fav, unfav } from '../Actions/favs';
-import { filter } from 'fuzzaldrin';
-import { sortBy, includes } from 'lodash';
 import Radium from 'radium';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import Select from 'react-select';
 import titleStore from '../Stores/titleStore.js';
 import type { Map } from 'immutable';
+import axios from 'axios';
 
 type Props = {
-  stations?: Map<string, Station>,
-  favorites?: Map<string, bool>,
+  favorites?: Map<number, bool>,
   selectedStation?: Station,
 }
 type State = {
@@ -27,6 +25,7 @@ const style = {
   appBar: {
     alignItems: 'center',
     overflow: 'visible',
+    flexShrink: 0,
   },
   icon: {
     color: 'white',
@@ -38,11 +37,11 @@ const style = {
   },
   selectWrap: {
     lineHeight: '32px',
+    marginTop: 16,
   },
 };
 
 @connect(state => ({
-  stations: state.stations,
   favorites: state.favorites,
   selectedStation: state.selectedStation,
 }))
@@ -51,9 +50,6 @@ export default class Toolbar extends React.Component {
   props: Props;
   static contextTypes = {
     router: React.PropTypes.object,
-  };
-  static childContextTypes = {
-    muiTheme: React.PropTypes.object,
   };
   state: State = {
     title: titleStore.defaultTitle,
@@ -80,24 +76,23 @@ export default class Toolbar extends React.Component {
     titleStore.off('title', this.handleTitle);
     titleStore.off('openInput', this.openInput);
   }
-  @autobind
-  filterOptions(placeholder: any, input: string): Station[] {
-    const result = [];
-    const stations = this.props.stations;
-    if (!stations) {
-      return [];
-    }
-    filter(stations.toArray(), input, { key: 'label' }).some((station, index) => {
-      result.push(station);
-      return index > 7;
-    });
-    return sortBy(result, r => !includes(r.label.toLowerCase(), 'hbf'));
+  async stationLoad(input: string) {
+    const stations = (await axios.get(`/api/search/${input}`)).data;
+    return {
+      options: stations,
+    };
   }
   @autobind
   openInput() {
     titleStore.changeTitle(
       <div style={style.selectWrap}>
-        <Select placeholder="Bahnhof..." filterOptions={this.filterOptions} onBlur={this.onBlur} onChange={this.submit}/>
+        <Select.Async
+          loadOptions={this.stationLoad}
+          valueKey="id"
+          labelKey="title"
+          placeholder="Bahnhof..."
+          onBlur={this.onBlur}
+          onChange={this.submit}/>
       </div>
     );
     this.setState({
@@ -121,7 +116,7 @@ export default class Toolbar extends React.Component {
     if (!station) {
       return;
     }
-    const stationLabel = station.label;
+    const stationLabel = station.title;
     if (station) {
       titleStore.changeTitle(stationLabel);
     } else {
@@ -133,14 +128,14 @@ export default class Toolbar extends React.Component {
   handleUnfav() {
     const { selectedStation } = this.props;
     if (selectedStation) {
-      unfav(selectedStation.value);
+      unfav(selectedStation.id);
     }
   }
   @autobind
   handleFav() {
     const { selectedStation } = this.props;
     if (selectedStation) {
-      fav(selectedStation.value);
+      fav(selectedStation.id);
     }
   }
   @autobind
@@ -159,7 +154,7 @@ export default class Toolbar extends React.Component {
     let favClass;
     let favBtn;
     if (selectedStation && favorites) {
-      const favved = favorites.has(selectedStation.value);
+      const favved = favorites.has(selectedStation.id);
       if (favved) {
         favClass = 'mdi mdi-favorite';
         favBtn = (<IconButton iconStyle={style.icon} iconClassName={favClass} onClick={this.handleUnfav}/>);

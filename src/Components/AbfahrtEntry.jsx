@@ -5,7 +5,6 @@ import { Paper } from 'material-ui';
 import { setDetail } from '../Actions/abfahrten';
 import Radium from 'radium';
 import React from 'react';
-import PureRender from 'pure-render-decorator';
 
 
 function normalizeName(name: string) {
@@ -114,7 +113,6 @@ const style = {
   },
 };
 
-@PureRender
 @Radium
 export default class AbfahrtEntry extends React.Component {
   props: Props;

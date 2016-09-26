@@ -1,8 +1,8 @@
 // @flow
 import { handleActions } from 'redux-actions';
 import { List, Map } from 'immutable';
-import rawStations from '../codes';
 
+const rawStations = [];
 const favKey = 'favs';
 let favorites = Map();
 const rawFavs = localStorage.getItem(favKey);
@@ -42,9 +42,9 @@ export default handleActions({
     };
   },
   FAV(state, { payload }: { payload: string }) {
-    const station: ?Station = state.stations.find((s: Station) => s.value === payload);
+    const station: ?Station = state.stations.find((s: Station) => s.id === payload);
     if (station) {
-      const favorites = state.favorites.set(station.value, true);
+      const favorites = state.favorites.set(station.id, true);
       localStorage.setItem(favKey, JSON.stringify(favorites.toJS()));
       return {
         favorites,
@@ -53,9 +53,9 @@ export default handleActions({
     return state;
   },
   UNFAV(state, { payload }: { payload: string }) {
-    const station: ?Station = state.stations.find((s: Station) => s.value === payload);
+    const station: ?Station = state.stations.find((s: Station) => s.id === payload);
     if (station) {
-      const favorites = state.favorites.delete(station.value);
+      const favorites = state.favorites.delete(station.id);
       localStorage.setItem(favKey, JSON.stringify(favorites.toJS()));
       return {
         favorites,

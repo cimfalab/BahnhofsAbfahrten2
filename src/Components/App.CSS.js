@@ -14,4 +14,7 @@ export default {
   '#dorfmapWrapper > div:first-child > div > div': {
     overflow: 'visible !important',
   },
+  '.Select-input > input': {
+    padding: '0!important',
+  },
 };

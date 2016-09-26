@@ -8,13 +8,7 @@ export const fetchAbfahrten = createAction('FETCH_ABFAHRTEN', async (station: St
     const abfahrten: {
       error?: any,
       departures: Abfahrt[],
-    } = await axios.get(`/api/${station.value}`, {
-      params: {
-        mode: 'marudor',
-        backend: 'iris',
-        version: 2,
-      },
-    });
+    } = (await axios.get(`/api/abfahrten/${station.id}`)).data;
     if (abfahrten.error) {
       throw new Error(abfahrten.error);
     }

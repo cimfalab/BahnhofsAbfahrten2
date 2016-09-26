@@ -6,6 +6,7 @@ import reduxPromise from 'redux-promise';
 import { Provider } from 'react-redux';
 import { createStore, compose, applyMiddleware, bindActionCreators } from 'redux';
 import { each } from 'lodash';
+import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 
 const reduxActions = require('redux-actions');
 reduxActions.createAction = (function(old) {
@@ -17,7 +18,7 @@ reduxActions.createAction = (function(old) {
 
 reduxActions.handleActions = (function(old) {
   return function(reducerMap: Object, ...rest) {
-    each(reducerMap, (r, index) => {
+    each(reducerMap, (r, index: number) => {
       reducerMap[index] = function(state, action) {
         const newState = r(state, action);
         if (state === newState) {
@@ -48,6 +49,7 @@ if (process.env.node_env !== 'production') {
 }
 
 if (module.hot) {
+  // $FlowFixMe
   module.hot.accept('../Reducers', () => {
     const nextRootReducer = require('../Reducers/index');
     store.replaceReducer(nextRootReducer);
@@ -71,11 +73,13 @@ export default class App extends React.Component {
     const { children } = this.props;
     return (
       <Provider store={store}>
-        <StyleRoot style={style.wrapper}>
-          <Toolbar/>
-          {children}
-          <Style rules={AppCss}/>
-        </StyleRoot>
+        <MuiThemeProvider>
+          <StyleRoot style={style.wrapper}>
+            <Toolbar/>
+            {children}
+            <Style rules={AppCss}/>
+          </StyleRoot>
+        </MuiThemeProvider>
       </Provider>
     );
   }

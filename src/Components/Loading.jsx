@@ -45,8 +45,8 @@ export default class Loading extends React.Component {
   render() {
     return (
       <div style={style.spinner}>
-        <div style={style.bounce}></div>
-        <div style={[style.bounce, style.bounce2]}></div>
+        <div style={style.bounce}/>
+        <div style={[style.bounce, style.bounce2]}/>
       </div>
     );
   }

@@ -1,7 +1,7 @@
 // @flow
-import '../src/babelHelper';
 import axios from 'axios';
-import stations from '../src/codes';
+
+const stations = [];
 
 const filteredStations = [];
 console.log('[');
