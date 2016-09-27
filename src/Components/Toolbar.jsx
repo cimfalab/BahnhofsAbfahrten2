@@ -87,6 +87,8 @@ export default class Toolbar extends React.Component {
     titleStore.changeTitle(
       <div style={style.selectWrap}>
         <Select.Async
+          autoload={false}
+          ignoreAccents={false}
           loadOptions={this.stationLoad}
           valueKey="id"
           labelKey="title"
