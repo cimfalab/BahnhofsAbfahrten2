@@ -6,10 +6,9 @@ var webpack = require('webpack');
 
 var node_env = process.env.NODE_ENV || 'development';
 
-var DashboardPlugin = require('webpack-dashboard/plugin');
+
 
 var plugins = [
-  new DashboardPlugin(),
   new webpack.NoErrorsPlugin(),
   new HtmlWebpackPlugin({
     template: 'html!./src/index.html',
@@ -27,6 +26,10 @@ if (node_env === 'production') {
   plugins.push(
     new webpack.optimize.UglifyJsPlugin()
   );
+} else {
+  var DashboardPlugin = require('webpack-dashboard/plugin');
+
+  plugins.push(new DashboardPlugin());
 }
 
 var alias = {
