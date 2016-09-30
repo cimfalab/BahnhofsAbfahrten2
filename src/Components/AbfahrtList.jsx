@@ -1,6 +1,5 @@
 // @flow
 // import { Paper } from 'material-ui';
-import _ from 'lodash';
 import { autobind } from 'core-decorators';
 import { clearAbfahrten, fetchAbfahrten, setSelectedStation } from '../Actions/abfahrten';
 import { connect } from 'react-redux';
@@ -72,7 +71,7 @@ class AbfahrtList extends React.Component {
     titleStore.changeTitle(titleStore.getTitle(station));
   }
   beautifyError(error: string) {
-    if (_.includes(error, 'Got no results')) {
+    if (error.includes('Got no results')) {
       return 'Keine Abfahrten';
     }
     return undefined;

@@ -1,5 +1,4 @@
 [ignore]
-.*node_modules/lodash.*
 .*node_modules/axios/.*
 .*node_modules/react/.*
 .*node_modules/react-dom/.*
@@ -12,7 +11,6 @@
 [libs]
 interfaces/
 node_modules/iflow-radium/index.js.flow
-node_modules/iflow-lodash/index.js.flow
 node_modules/iflow-fuzzaldrin/index.js.flow
 
 [options]

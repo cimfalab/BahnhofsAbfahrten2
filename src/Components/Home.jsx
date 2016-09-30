@@ -7,10 +7,19 @@ import React from 'react';
 import Spenden from './Spenden';
 import titleStore from '../Stores/titleStore.js';
 import type { Map } from 'immutable';
+import axios from 'axios';
 
 type Props = {
   favorites?: Map<string, bool>,
-  stations?: Map<string, Station>,
+}
+
+type State = {
+  favorites: {
+    id: number,
+    title: string,
+    evaId: string,
+    recursive: bool,
+  }[],
 }
 
 const style = {
@@ -24,17 +33,39 @@ const style = {
 @Radium
 @connect(state => ({
   favorites: state.favorites,
-  stations: state.stations,
 }))
 export default class extends React.Component {
   props: Props;
+  state: State = {
+    favorites: [],
+  };
   constructor() {
     super();
     titleStore.resetTitle();
   }
+  componentWillMount() {
+    this.updateFavs(this.props);
+  }
+  componentWillReceiveProps(props: Props) {
+    this.updateFavs(props);
+  }
+  async updateFavs(props: Props) {
+    if (!props.favorites) {
+      return;
+    }
+    const newFavs = await Promise.all(
+      props.favorites.map(async (x, favEntry) => {
+        const favs = (await axios.get(`/api/station/${favEntry}`)).data;
+        return favs;
+      }).toArray()
+    );
+    this.setState({
+      favorites: newFavs,
+    });
+  }
   render() {
-    const { favorites, stations } = this.props;
-    if (!favorites || favorites.size <= 0 || !stations) {
+    const { favorites } = this.state;
+    if (!favorites || favorites.length <= 0) {
       return (
         <div style={style.wrap}>
           <Paper>
@@ -47,8 +78,9 @@ export default class extends React.Component {
     return (
       <div style={style.wrap}>
         {
-          // $FlowFixMe
-          favorites.map((x, stationVal) => stations.find(x => x.value === stationVal)).map((fav) => <FavEntry fav={fav.label} key={fav.value}/>).toList()
+          favorites.map(fav => (
+            <FavEntry key={fav.id} fav={fav.title}/>
+          ))
         }
         <Spenden/>
       </div>

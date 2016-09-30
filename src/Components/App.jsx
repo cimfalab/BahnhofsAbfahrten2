@@ -5,7 +5,6 @@ import React from 'react';
 import reduxPromise from 'redux-promise';
 import { Provider } from 'react-redux';
 import { createStore, compose, applyMiddleware, bindActionCreators } from 'redux';
-import { each } from 'lodash';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 
 const reduxActions = require('redux-actions');
@@ -18,7 +17,8 @@ reduxActions.createAction = (function(old) {
 
 reduxActions.handleActions = (function(old) {
   return function(reducerMap: Object, ...rest) {
-    each(reducerMap, (r, index: number) => {
+    Object.keys(reducerMap).forEach(index => {
+      const r = reducerMap[index];
       reducerMap[index] = function(state, action) {
         const newState = r(state, action);
         if (state === newState) {

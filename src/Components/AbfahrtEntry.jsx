@@ -1,5 +1,4 @@
 /* @flow */
-import _ from 'lodash';
 import { autobind } from 'core-decorators';
 import { Paper } from 'material-ui';
 import { setDetail } from '../Actions/abfahrten';
@@ -119,7 +118,7 @@ export default class AbfahrtEntry extends React.Component {
   getAbfahrt(name: string, index: number, length: number, abfahrt: Abfahrt, isCancelled?: ?number, isAdditional?: ?number): Array<any> {
     const via = [];
     const lowerName = name.toLowerCase();
-    const isHbf = _.includes(lowerName, 'hbf') || _.includes(lowerName, 'centraal') || _.includes(lowerName, 'centrale') || _.includes(lowerName, 'termini');
+    const isHbf = lowerName.includes('hbf') || lowerName.includes('centraal') || lowerName.includes('centrale') || lowerName.includes('termini');
     via.push(<span key={`${index}i`} style={[isCancelled && style.cancelled, isAdditional && style.additional, isHbf && style.detail.hbf]}>{normalizeName(name)}</span>);
     if (index + 1 !== length) {
       via.push(<span key={index}> - </span>);
@@ -157,7 +156,7 @@ export default class AbfahrtEntry extends React.Component {
     if (abfahrt.messages.delay.length > 0) {
       info += abfahrt.messages.delay[0].text;
     }
-    _.forEach(abfahrt.messages.qos, q => {
+    abfahrt.messages.qos.forEach(q => {
       if (info.length > 0) {
         info += ' +++ ';
       }
