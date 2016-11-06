@@ -124,7 +124,7 @@ export default class Toolbar extends React.Component {
     } else {
       titleStore.resetTitle();
     }
-    this.context.router.push(`/${stationLabel.replace('/', '%F')}`);
+    this.context.router.push(`/${stationLabel.replace('/', '$SLASH$')}`);
   }
   @autobind
   handleUnfav() {

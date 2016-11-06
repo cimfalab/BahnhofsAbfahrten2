@@ -10,8 +10,6 @@
 
 [libs]
 interfaces/
-node_modules/iflow-radium/index.js.flow
-node_modules/iflow-fuzzaldrin/index.js.flow
 
 [options]
 module.name_mapper='config$' -> 'config.development.js'

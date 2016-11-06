@@ -33,7 +33,11 @@ class TitleStore extends EventEmitter {
   openInput = () => {
     this.emit('openInput');
   };
-  getTitle(title) {
+  getTitle(rawTitle) {
+    let title = rawTitle;
+    if (typeof rawTitle === 'string') {
+      title = rawTitle.replace(/\$SLASH\$/g, '/');
+    }
     return (
       <h1 style={titleStyle} onClick={this.openInput}>{title}</h1>
     );
