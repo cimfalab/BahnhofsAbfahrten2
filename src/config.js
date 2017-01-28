@@ -1,3 +1,4 @@
+// @flow
 import { Router, Route, browserHistory } from 'react-router';
 import App from './Components/App.jsx';
 import AbfahrtList from './Components/AbfahrtList.jsx';

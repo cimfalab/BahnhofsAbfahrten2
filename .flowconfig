@@ -14,6 +14,7 @@ interfaces/
 [options]
 module.name_mapper='config$' -> 'config.development.js'
 module.name_mapper='babel-regenerator-runtime$' -> 'React'
+module.name_mapper='babel-polyfill$' -> 'React'
 module.name_mapper='.*\.css$' -> 'React'
 module.name_mapper='.*\.json$' -> 'React'
 module.system=haste

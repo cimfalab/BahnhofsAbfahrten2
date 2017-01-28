@@ -1,13 +1,37 @@
 {
-  "presets": ["react", "es2015", "stage-2"],
+  "presets": [
+    ["env", {
+      "targets": {
+        "chrome": 43,
+        "firefox": 42,
+        "safari": 9,
+        "opera": 30,
+        "edge": 12,
+        "iOS": 9
+      },
+      "useBuiltIns": true,
+      "loose": true
+      }],
+      "stage-2",
+      "react"
+    ],
   "plugins": [
+    ["transform-react-jsx", { "pragma": "cxsReact" }],
     "transform-decorators-legacy"
   ],
   "env": {
+    "cevelopment": {
+      "plugins": [
+        "transform-react-jsx-source",
+        "flow-react-proptypes"
+      ]
+    },
     "production": {
       "plugins": [
         "transform-remove-console",
-        "transform-remove-debugger"
+        "transform-remove-debugger",
+        "transform-react-inline-elements",
+        "transform-react-constant-elements"
       ]
     }
   }

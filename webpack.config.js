@@ -63,7 +63,6 @@ module.exports = {
   module: {
     loaders: [
       { test: /\.css$/, loader: 'style!css' },
-      { test: /\.CSS.js$/, exclude: /(node_modules|dependency)/, loader: 'inline-css!babel' },
       { test: /\.less$/, loader: 'style!css!autoprefixer?browsers=last 2 version!less' },
       { test: /^((?!CSS\.js$).)*(\.jsx?)$/,
         exclude: /(node_modules)/,

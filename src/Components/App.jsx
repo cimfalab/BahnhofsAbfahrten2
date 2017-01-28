@@ -1,11 +1,30 @@
 // @flow
-import AppCss from './App.CSS';
-import Radium, { Style, StyleRoot } from 'radium';
+import cxs from 'cxs/monolithic';
 import React from 'react';
 import reduxPromise from 'redux-promise';
 import { Provider } from 'react-redux';
 import { createStore, compose, applyMiddleware, bindActionCreators } from 'redux';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
+
+const globalStyles = {
+  '#dorfmapWrapper': {
+    height: '100%',
+  },
+  body: {
+    height: '100%',
+    margin: 0,
+    padding: 0,
+    width: '100%',
+  },
+  '#dorfmapWrapper > div:first-child > div > div': {
+    overflow: 'visible !important',
+  },
+  '.Select-input > input': {
+    padding: '0!important',
+  },
+};
+
+cxs('html', globalStyles);
 
 const reduxActions = require('redux-actions');
 reduxActions.createAction = (function(old) {
@@ -56,17 +75,8 @@ if (module.hot) {
   });
 }
 
-const style = {
-  wrapper: {
-    display: 'flex',
-    flexDirection: 'column',
-    height: '100%',
-  },
-};
-
 const Toolbar = require('./Toolbar').default;
 
-@Radium
 export default class App extends React.Component {
   props: Props;
   render() {
@@ -74,13 +84,20 @@ export default class App extends React.Component {
     return (
       <Provider store={store}>
         <MuiThemeProvider>
-          <StyleRoot style={style.wrapper}>
+          <div css={style.wrapper}>
             <Toolbar/>
             {children}
-            <Style rules={AppCss}/>
-          </StyleRoot>
+          </div>
         </MuiThemeProvider>
       </Provider>
     );
   }
 }
+
+const style = {
+  wrapper: {
+    display: 'flex',
+    flexDirection: 'column',
+    height: '100%',
+  },
+};

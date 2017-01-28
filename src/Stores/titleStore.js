@@ -1,3 +1,4 @@
+// @flow
 import EventEmitter from 'eventemitter3';
 import React from 'react';
 

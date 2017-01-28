@@ -1,8 +1,20 @@
 // @flow
 import React from 'react';
-import Radium from 'radium';
+import createAnimation from '../createAnimaton';
 
-const bounce = Radium.keyframes({
+export default class Loading extends React.Component {
+  render() {
+    return (
+      <div css={style.spinner}>
+        <div css={style.bounce}/>
+        <div css={[style.bounce, style.bounce2]}/>
+      </div>
+    );
+  }
+}
+
+
+const bounce = createAnimation({
   '0%': {
     transform: 'scale(0)',
   },
@@ -12,7 +24,7 @@ const bounce = Radium.keyframes({
   '100%': {
     transform: 'scale(0)',
   },
-});
+}, 'bounce');
 
 const style = {
   spinner: {
@@ -39,15 +51,3 @@ const style = {
     animationDelay: '-1s',
   },
 };
-
-@Radium
-export default class Loading extends React.Component {
-  render() {
-    return (
-      <div style={style.spinner}>
-        <div style={style.bounce}/>
-        <div style={[style.bounce, style.bounce2]}/>
-      </div>
-    );
-  }
-}

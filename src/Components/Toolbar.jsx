@@ -1,9 +1,7 @@
 // @flow
 import { AppBar, IconButton } from 'material-ui';
-import { autobind } from 'core-decorators';
 import { connect } from 'react-redux';
 import { fav, unfav } from '../Actions/favs';
-import Radium from 'radium';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import Select from 'react-select';
@@ -21,31 +19,10 @@ type State = {
   station?: string,
 }
 
-const style = {
-  appBar: {
-    alignItems: 'center',
-    overflow: 'visible',
-    flexShrink: 0,
-  },
-  icon: {
-    color: 'white',
-    fill: 'white',
-  },
-  icons: {
-    display: 'block',
-    marginTop: -8,
-  },
-  selectWrap: {
-    lineHeight: '32px',
-    marginTop: 16,
-  },
-};
-
 @connect(state => ({
   favorites: state.favorites,
   selectedStation: state.selectedStation,
 }))
-@Radium
 export default class Toolbar extends React.Component {
   props: Props;
   static contextTypes = {
@@ -61,13 +38,12 @@ export default class Toolbar extends React.Component {
       inputs[0].focus();
     }
   }
-  @autobind
-  handleTitle(title: string, oldTitle: string) {
+  handleTitle = (title: string, oldTitle: string) => {
     this.setState({
       title,
       oldTitle,
     });
-  }
+  };
   componentDidMount() {
     titleStore.on('title', this.handleTitle);
     titleStore.on('openInput', this.openInput);
@@ -82,10 +58,9 @@ export default class Toolbar extends React.Component {
       options: stations,
     };
   }
-  @autobind
-  openInput() {
+  openInput = () => {
     titleStore.changeTitle(
-      <div style={style.selectWrap}>
+      <div css={style.selectWrap}>
         <Select.Async
           autoload={false}
           ignoreAccents={false}
@@ -100,7 +75,7 @@ export default class Toolbar extends React.Component {
     this.setState({
       station: '',
     });
-  }
+  };
   onBlur() {
     titleStore.revertTitle();
   }
@@ -113,8 +88,7 @@ export default class Toolbar extends React.Component {
       break;
     }
   }
-  @autobind
-  submit(station: Station) {
+  submit = (station: Station) => {
     if (!station) {
       return;
     }
@@ -125,25 +99,22 @@ export default class Toolbar extends React.Component {
       titleStore.resetTitle();
     }
     this.context.router.push(`/${stationLabel.replace('/', '$SLASH$')}`);
-  }
-  @autobind
-  handleUnfav() {
+  };
+  handleUnfav = () => {
     const { selectedStation } = this.props;
     if (selectedStation) {
       unfav(selectedStation.id);
     }
-  }
-  @autobind
-  handleFav() {
+  };
+  handleFav = () => {
     const { selectedStation } = this.props;
     if (selectedStation) {
       fav(selectedStation.id);
     }
-  }
-  @autobind
-  goHome() {
+  };
+  goHome = () => {
     this.context.router.push('/');
-  }
+  };
   render() {
     const { favorites, selectedStation } = this.props;
     const { station } = this.state;
@@ -165,9 +136,9 @@ export default class Toolbar extends React.Component {
         favBtn = (<IconButton iconStyle={style.icon} iconClassName={favClass} onClick={this.handleFav}/>);
       }
     }
-    const icons = (<span style={style.icons}>{searchIcon}{favBtn}</span>);
+    const icons = (<span css={style.icons}>{searchIcon}{favBtn}</span>);
     const homeIcon = (
-      <span style={style.icons}>
+      <span css={style.icons}>
         <IconButton onClick={this.goHome} iconStyle={style.icon} style={style.icon} iconClassName="mdi mdi-home"/>
       </span>
     );
@@ -179,3 +150,23 @@ export default class Toolbar extends React.Component {
     );
   }
 }
+
+const style = {
+  appBar: {
+    alignItems: 'center',
+    overflow: 'visible',
+    flexShrink: 0,
+  },
+  icon: {
+    color: 'white',
+    fill: 'white',
+  },
+  icons: {
+    display: 'block',
+    marginTop: -8,
+  },
+  selectWrap: {
+    lineHeight: '32px',
+    marginTop: 16,
+  },
+};

@@ -1,11 +1,9 @@
 // @flow
 // import { Paper } from 'material-ui';
-import { autobind } from 'core-decorators';
 import { clearAbfahrten, fetchAbfahrten, setSelectedStation } from '../Actions/abfahrten';
 import { connect } from 'react-redux';
 import AbfahrtEntry from './AbfahrtEntry.jsx';
 import Loading from './Loading.jsx';
-import Radium from 'radium';
 import React from 'react';
 import titleStore from '../Stores/titleStore.js';
 import type { List, Map } from 'immutable';
@@ -22,31 +20,20 @@ type Props = {
   selectedDetail?: Abfahrt,
 }
 
-const style = {
-  list: {
-    display: 'flex',
-    flexDirection: 'column',
-    overflow: 'auto',
-  },
-};
-
-@Radium
 @connect(state => ({
   abfahrten: state.abfahrten,
   error: state.error,
   favorites: state.favorites,
   selectedDetail: state.selectedDetail,
 }))
-class AbfahrtList extends React.Component {
+export default class AbfahrtList extends React.PureComponent {
   props: Props;
-  @autobind
-  fav() {
+  fav = () => {
     fav(this.props.params.station);
-  }
-  @autobind
-  unfav() {
+  };
+  unfav = () => {
     unfav(this.props.params.station);
-  }
+  };
   async getStation(stationString: string) {
     const possibleStations = (await axios.get(`/api/search/${stationString}`)).data;
     if (possibleStations.length) {
@@ -89,14 +76,16 @@ class AbfahrtList extends React.Component {
     }
     if (!abfahrten) {
       return (
-        <Loading/>
+        <div css={style.wrapper}>
+          <Loading/>
+        </div>
       );
     }
     return (
-      <div style={style.list}>
+      <div css={style.list}>
         {
-          abfahrten.map(abfahrt => {
-            const key = abfahrt.train + (abfahrt.scheduledDeparture || abfahrt.scheduledArrival);
+          abfahrten.map((abfahrt, i) => {
+            const key = abfahrt.train + (abfahrt.scheduledDeparture || abfahrt.scheduledArrival) + i;
             return (
               <AbfahrtEntry
                 detail={selectedDetail === abfahrt}
@@ -110,4 +99,14 @@ class AbfahrtList extends React.Component {
   }
 }
 
-export default AbfahrtList;
+const style = {
+  list: {
+    display: 'flex',
+    flexDirection: 'column',
+    overflow: 'auto',
+  },
+  wrapper: {
+    flex: 1,
+    position: 'relative',
+  },
+};

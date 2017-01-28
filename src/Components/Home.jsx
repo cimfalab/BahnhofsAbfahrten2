@@ -1,10 +1,8 @@
-/* @flow */
+// @flow
 import { connect } from 'react-redux';
 import { Paper } from 'material-ui';
 import FavEntry from './FavEntry.jsx';
-import Radium from 'radium';
 import React from 'react';
-import Spenden from './Spenden';
 import titleStore from '../Stores/titleStore.js';
 import type { Map } from 'immutable';
 import axios from 'axios';
@@ -30,7 +28,6 @@ const style = {
   },
 };
 
-@Radium
 @connect(state => ({
   favorites: state.favorites,
 }))
@@ -67,22 +64,20 @@ export default class extends React.Component {
     const { favorites } = this.state;
     if (!favorites || favorites.length <= 0) {
       return (
-        <div style={style.wrap}>
+        <div css={style.wrap}>
           <Paper>
             Bisher hast du keine Favoriten.
           </Paper>
-          <Spenden/>
         </div>
       );
     }
     return (
-      <div style={style.wrap}>
+      <div css={style.wrap}>
         {
           favorites.map(fav => (
             <FavEntry key={fav.id} fav={fav.title}/>
           ))
         }
-        <Spenden/>
       </div>
     );
   }
