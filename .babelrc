@@ -20,7 +20,7 @@
     "transform-decorators-legacy"
   ],
   "env": {
-    "cevelopment": {
+    "development": {
       "plugins": [
         "transform-react-jsx-source",
         "flow-react-proptypes"
@@ -29,9 +29,7 @@
     "production": {
       "plugins": [
         "transform-remove-console",
-        "transform-remove-debugger",
-        "transform-react-inline-elements",
-        "transform-react-constant-elements"
+        "transform-remove-debugger"
       ]
     }
   }
